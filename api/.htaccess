@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^hook.*$ hook.php
+RewriteRule ^setup.*$ setup.php

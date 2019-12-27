@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd api
+php -S localhost:4000

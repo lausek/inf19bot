@@ -1,0 +1,7 @@
+/vendor/
+composer.lock
+config.json
+**/secret/key
+**/secret/tgtoken
+trace
+request

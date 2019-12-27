@@ -25,7 +25,7 @@ git config git-ftp.remote_root <ftp_subdirectory>
 git ftp init
 ```
 
-2. Create `config.json`. See [Configuration](./data/README.md).
+2. Create `data/config.json`. See [Configuration](./data/README.md).
 
 3. Setup Telegram webhook
 

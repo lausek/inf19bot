@@ -1,7 +1,5 @@
 # Configuration
 
-Have a look at [Secret Configuration](secret/README.md) to find out how to setup Telegram and API Tokens.
-
 Create a JSON file `config.json` containing the following keys:
 
 |Key|Description|Example|

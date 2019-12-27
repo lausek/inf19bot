@@ -35,7 +35,8 @@ class NextCommand extends Command
         $schedule_url = Util::get_config('schedule_url');
         $msg = "" . Language::get('CMD_NEXT_GENERAL');
         $msg .= "\n" . Language::get('CMD_NEXT_DATE') . ":";
-        $msg .= "\n" . Language::get('CMD_NEXT_TIME') . ":";
+        $msg .= "\n" . Language::get('CMD_NEXT_TIME_FROM') . ":";
+        $msg .= "\n" . Language::get('CMD_NEXT_TIME_TILL') . ":";
         $msg .= "\n[open document]($schedule_url)";
         return $msg;
     }

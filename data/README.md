@@ -14,6 +14,7 @@ Create a JSON file `config.json` containing the following keys:
 
 - `secret/key` - secret used for accessing the web configuration
 - `secret/tgtoken` - telegram token
+- `secret/tick` - token the cron job callback will use
 
 ### Format
 

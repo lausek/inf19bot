@@ -3,6 +3,7 @@
     "description": "telegram bot for inf19",
     "type": "project",
     "require": {
+        "php": ">=7.3",
         "davtur19/turibot": "^1.1",
         "smalot/pdfparser": "^0.14.0"
     },

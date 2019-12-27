@@ -3,5 +3,6 @@ composer.lock
 config.json
 **/secret/key
 **/secret/tgtoken
+**/secret/tick
 trace
 request

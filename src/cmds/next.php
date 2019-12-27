@@ -32,6 +32,11 @@ class NextCommand extends Command
 {
     function run() : String
     {
-        return '[open document]('.Util::get_config('schedule_url').')';
+        $schedule_url = Util::get_config('schedule_url');
+        $msg = "" . Language::get('CMD_NEXT_GENERAL');
+        $msg .= "\n" . Language::get('CMD_NEXT_DATE') . ":";
+        $msg .= "\n" . Language::get('CMD_NEXT_TIME') . ":";
+        $msg .= "\n[open document]($schedule_url)";
+        return $msg;
     }
 }

@@ -8,6 +8,14 @@ class TimetableCheck extends Check
 {
     function run() : String
     {
+        $url = Util::get_config('schedule_url');
+        if (null !== $url)
+        {
+            $remote_hash = hash_file('sha256', $url);
+
+            // TODO: compare hash with cache
+            // TODO: if not equal, notify and replace hash
+        }
         return '';
     }
 }

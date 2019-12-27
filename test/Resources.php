@@ -21,4 +21,10 @@ final class ResourcesTest extends TestCase
         $this->assertEquals($expected, Util::path('secret/key'));
         $this->assertEquals($expected, Util::path('/secret/key'));
     }
+
+    public function testResolving()
+    {
+        $_SERVER['DOCUMENT_ROOT'] = '/home/www/htdocs';
+        $this->assertEquals('/home/www/htdocs/cache', Util::path('../cache'));
+    }
 }

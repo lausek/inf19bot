@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Webmozart\PathUtil\Path;
 use TuriBot\Client;
 
 class Util
@@ -15,15 +16,10 @@ class Util
         }
 
         $root .= '/data';
+        $path = strpos($postfix, '/') === 0 ? "$root$postfix" : "$root/$postfix";
 
-        if (strpos($postfix, '/') === 0)
-        {
-            return "$root$postfix";
-        }
-        else
-        {
-            return "$root/$postfix";
-        }
+        
+        return Path::canonicalize($path);
     }
     
     static function load_secret_from($fpath)
@@ -158,5 +154,13 @@ class Util
             return null;
         }
         return (array) json_decode($content);
+    }
+
+    static function write_json_file($path, $obj)
+    {
+        if (false === file_put_contents($path, json_encode($obj)))
+        {
+            Log::trace("error writing file $path");
+        }
     }
 }

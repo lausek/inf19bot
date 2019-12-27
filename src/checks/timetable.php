@@ -8,7 +8,7 @@ class TimetableCheck extends Check
 {
     function run() : String
     {
-        $url = Util::get_config('schedule_url');
+        $url = Util::get_config('timetable_url');
         if (null !== $url)
         {
             $remote_hash = hash_file('sha256', $url);

@@ -32,12 +32,12 @@ class NextCommand extends Command
 {
     function run() : String
     {
-        $schedule_url = Util::get_config('schedule_url');
+        $timetable_url = Util::get_config('timetable_url');
         $msg = "" . Language::get('CMD_NEXT_GENERAL');
         $msg .= "\n" . Language::get('CMD_NEXT_DATE') . ":";
         $msg .= "\n" . Language::get('CMD_NEXT_TIME_FROM') . ":";
         $msg .= "\n" . Language::get('CMD_NEXT_TIME_TILL') . ":";
-        $msg .= "\n[" . Language::get('CMD_NEXT_OPEN') . "]($schedule_url)";
+        $msg .= "\n[" . Language::get('CMD_NEXT_OPEN') . "]($timetable_url)";
         return $msg;
     }
 }

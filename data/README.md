@@ -12,8 +12,8 @@ Create a JSON file `config.json` containing the following keys:
 
 ## Secrets
 
-- [key] `secret/key` - secret used for accessing the web configuration
-- [tgtoken] `secret/tgtoken` - telegram token
+- `secret/key` - secret used for accessing the web configuration
+- `secret/tgtoken` - telegram token
 
 ### Format
 

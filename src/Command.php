@@ -11,7 +11,7 @@ abstract class Command
         $this->args = $args;
     }
 
-    abstract function run() : String;
+    abstract function run() : string;
 
     static function get_available()
     {

@@ -42,33 +42,60 @@ class Util
         return $secret;
     }
     
-    static function is_authorized()
+    // no type for $received because we cannot have nullable yet...
+    static function is_authorized(string $secret_name, $received)
     {
-        if (!isset($_POST['key']))
+        if (!isset($received))
         {
             return false;
         }
         
-        $given = $_POST['key'];
-        $key = self::load_secret_from(Util::path('/secret/key'));
+        $key = Util::load_secret_from(Util::path("/secret/$secret_name"));
     
         if (null === $key)
         {
             return false;
         }
         
-        return $given === $key;
+        return $received === $key;
     }
-    
-    static function critical_section()
+
+    // check if content of secret $secret_name matches the one $received by the script. only process $execute with the request is authorized.
+    // no type for $received because we cannot have nullable yet...
+    static function protect_call_using(string $secret_name, $received, callable $execute)
     {
         Log::trace("access requested for ${_SERVER['REQUEST_URI']}");
-        if (!Util::is_authorized())
+        if (Util::is_authorized($secret_name, $received))
+        {
+            Log::trace('access granted');
+            $execute();
+        }
+        else
         {
             Log::trace('access denied');
             die();
         }
-        Log::trace('access granted');
+    }
+
+    static function set_webhook_active(bool $active) : string
+    {
+        $url = $active ? Util::get_config('webhook_url') : '';
+        $cons = Util::get_config('webhook_connections') ?? 20;
+        $subscribe_to = Util::get_config('webhook_subscribe') ?? [];
+    
+        $client = Util::get_client();
+        $result = $client->setWebhook($url, null, $cons, $subscribe_to);
+    
+        if (true === $result->ok)
+        {
+            Log::trace("webhook enabled: $active");
+            return "webhook enabled: $active";
+        }
+        else
+        {
+            Log::trace($result->description);
+            return $result->description;
+        }
     }
     
     static function get_client()

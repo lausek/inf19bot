@@ -7,7 +7,7 @@ class HelpCommand extends Command
     function run() : String
     {
         $output = Language::get('CMD_HELP_GREET') . "\n";
-        foreach (self::get_available() as $name => $location)
+        foreach (self::get_all() as $name => $location)
         {
             $output .= "- /$name\n";
         }

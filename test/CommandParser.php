@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
 
-final class CommandTest extends TestCase
+final class CommandParserTest extends TestCase
 {
     public function testParsing()
     {

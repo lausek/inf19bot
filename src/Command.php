@@ -13,7 +13,7 @@ abstract class Command
 
     abstract function run() : string;
 
-    static function get_available()
+    static function get_all()
     {
         $found = [];
     
@@ -28,5 +28,17 @@ abstract class Command
         }
     
         return $found;
+    }
+
+    static function load_all() : array
+    {
+        $loaded = [];
+        foreach (self::get_all() as $name => $path)
+        {
+            require_once($path);
+            $classprefix = ucwords($name); 
+            $loaded[$name] = "${classprefix}Command";
+        }
+        return $loaded;
     }
 }

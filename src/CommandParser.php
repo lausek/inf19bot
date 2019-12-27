@@ -24,7 +24,7 @@ class CommandParser
         }
     
         $cmd = self::parse($query);
-        $cmds = Command::get_available();
+        $cmds = Command::get_all();
     
         if (!array_key_exists($cmd['name'], $cmds))
         {

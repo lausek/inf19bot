@@ -8,6 +8,11 @@ abstract class Check extends Command
 {
     abstract function run() : String;
 
+    static function get_classname(string $name)
+    {
+        return ucwords($name) . "Check";
+    }
+
     static function get_all()
     {
         $found = [];

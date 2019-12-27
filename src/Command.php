@@ -13,6 +13,11 @@ abstract class Command
 
     abstract function run() : string;
 
+    static function get_classname(string $name)
+    {
+        return ucwords($name) . "Command";
+    }
+
     static function get_all()
     {
         $found = [];
@@ -36,8 +41,7 @@ abstract class Command
         foreach (self::get_all() as $name => $path)
         {
             require_once($path);
-            $classprefix = ucwords($name); 
-            $loaded[$name] = "${classprefix}Command";
+            $loaded[$name] = self::get_classname($name);
         }
         return $loaded;
     }

@@ -5,7 +5,8 @@
     "require": {
         "php": ">=7.3",
         "davtur19/turibot": "^1.1",
-        "smalot/pdfparser": "^0.14.0"
+        "smalot/pdfparser": "^0.14.0",
+        "webmozart/path-util": "^2.3"
     },
     "authors": [
         {

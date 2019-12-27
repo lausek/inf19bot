@@ -147,7 +147,7 @@ class Util
     
     static function load_json_file($path)
     {
-        $content = file_get_contents($path);
+        $content = @file_get_contents($path);
         if (false === $content)
         {
             Log::trace("file $path not found");

@@ -1,6 +1,7 @@
 /vendor/
 composer.lock
 config.json
+**/cache/*
 **/secret/key
 **/secret/tgtoken
 **/secret/tick

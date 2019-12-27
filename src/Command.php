@@ -5,6 +5,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 abstract class Command
 {
     public $args = [];
+    public $cache;
+
+    function __construct()
+    {
+        $this->cache = new Cache(get_class($this));
+    }
 
     function set_args($args = [])
     {

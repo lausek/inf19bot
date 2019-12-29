@@ -166,7 +166,8 @@ class Util
 
     static function set_nerds_id($id)
     {
-        new Cache('Ids')->nerds = $id;
+        $cache = new Cache('Ids');
+        $cache->nerds = $id;
     }
 
     static function get_nerds_id()

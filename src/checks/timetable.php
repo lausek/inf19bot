@@ -24,7 +24,7 @@ class TimetableCheck extends Check
                 Util::inform_nerds($msg);
 
                 $this->cache->last_hash = $remote_hash;
-                $this->cache->last_update = date();
+                $this->cache->last_update = date('Y-m-d h:i:s');
             }
         }
         return '';

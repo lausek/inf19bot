@@ -17,7 +17,11 @@ class Language
         {
             $location = Util::get_config('language');
             self::load(Util::path($location));
-            var_dump(self::$loaded);
+        }
+        if (!isset(self::$loaded[$key]))
+        {
+            Log::trace("language key $key requested but not found");
+            return null;
         }
         return self::$loaded[$key];
     }

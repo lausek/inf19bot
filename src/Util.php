@@ -119,21 +119,8 @@ class Util
     
         if (null === $config)
         {
-            $raw = file_get_contents(Util::path('config.json'));
-            if (false === $raw)
-            {
-                Log::trace('no config found');
-                $config = [];
-            }
-            else
-            {
-                $parsed = json_decode($raw);
-                if (null === $parsed)
-                {
-                    Log::trace('json error: ' . json_last_error_msg());
-                }
-                $config = (array) $parsed;
-            }
+            $config = Util::load_json_file(Util::path('config.json'));
+            assert(null !== $config);
         }
     
         if (array_key_exists($key, $config))

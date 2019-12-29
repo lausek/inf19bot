@@ -153,7 +153,13 @@ class Util
             Log::trace("file $path not found");
             return null;
         }
-        return (array) json_decode($content);
+        $decoded = json_decode($content);
+        if (null === $decoded)
+        {
+            Log::trace('json error: ' . json_last_error_msg());
+            return null;
+        }
+        return (array) $decoded;
     }
 
     static function write_json_file($path, $obj)

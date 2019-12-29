@@ -163,4 +163,27 @@ class Util
             Log::trace("error writing file $path");
         }
     }
+
+    static function set_nerds_id($id)
+    {
+        new Cache('Ids')->nerds = $id;
+    }
+
+    static function get_nerds_id()
+    {
+        $cache = new Cache('Ids');
+        return $cache->nerds;
+    }
+
+    static function inform_nerds($msg)
+    {
+        $chat_id = Util::get_nerds_id();
+        if (null === $chat_id)
+        {
+            Log::trace("no group id configured");
+            return;
+        }
+        $client = Util::get_client();
+        $client->sendMessage($chat_id, $msg, 'markdown');
+    }
 }

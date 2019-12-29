@@ -16,7 +16,13 @@ class TimetableCheck extends Check
             if (null === $this->cache->last_hash
             || $this->cache->last_hash !== $remote_hash)
             {
-                // TODO: notify
+                $msg = Language::get('CHK_TIMETABLE_UPDATED');
+                $msg .= " See [";
+                $msg .= Language::get('GEN_OPEN_ORIGINAL');
+                $msg .= "]($url)";
+
+                Util::inform_nerds($msg);
+
                 $this->cache->last_hash = $remote_hash;
                 $this->cache->last_update = date();
             }

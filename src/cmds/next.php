@@ -37,7 +37,7 @@ class NextCommand extends Command
         $msg .= "\n" . Language::get('CMD_NEXT_DATE') . ":";
         $msg .= "\n" . Language::get('CMD_NEXT_TIME_FROM') . ":";
         $msg .= "\n" . Language::get('CMD_NEXT_TIME_TILL') . ":";
-        $msg .= "\n[" . Language::get('CMD_NEXT_OPEN') . "]($timetable_url)";
+        $msg .= "\n[" . Language::get('GEN_OPEN_ORIGINAL') . "]($timetable_url)";
         return $msg;
     }
 }

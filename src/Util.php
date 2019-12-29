@@ -156,11 +156,25 @@ class Util
         }
     }
 
+    static function add_forward_id($id)
+    {
+        $cache = new Cache('Ids');
+        if (isset($cache->forward_err_to))
+        {
+            $cache->forward_err_to[] = $id;
+        }
+        else
+        {
+            $cache->forward_err_to = [$id];
+        }
+        Log::etrace("forwarding errors to $id now");
+    }
+
     static function set_nerds_id($id)
     {
         $cache = new Cache('Ids');
         $cache->nerds = $id;
-        Log::etrace("new nerds group is $id");
+        Log::etrace("new nerds group chat id is $id");
     }
 
     static function get_nerds_id()

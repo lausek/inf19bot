@@ -39,17 +39,7 @@ function forward()
 {
     if (isset($_POST['id']))
     {
-        $id = $_POST['id'];
-        $cache = new Cache('Ids');
-        if (isset($cache->forward_err_to))
-        {
-            $cache->forward_err_to[] = $id;
-        }
-        else
-        {
-            $cache->forward_err_to = [$id];
-        }
-        Log::etrace("forwarding errors to $id now");
+        Util::add_forward_id($_POST['id']);
         return 'success';
     }
     else

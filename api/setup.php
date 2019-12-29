@@ -6,7 +6,7 @@ Util::protect_call_using('key', $_POST['key'] ?? null, function ()
 {
     if (!function_exists('curl_version'))
     {
-        Log::trace('curl is not installed');
+        Log::etrace('curl is not installed');
         echo 'curl is not installed';
         die();
     }

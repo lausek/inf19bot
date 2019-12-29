@@ -16,7 +16,7 @@ class Cache
         {
             if (!mkdir($cache_dir, 0755))
             {
-                trace('fs: cache exists but is not dir');
+                etrace('fs: cache exists but is not dir');
                 exit();
             }
         }

@@ -33,7 +33,7 @@ class Util
         }
         else
         {
-            Log::trace("no secret at $fpath");
+            Log::etrace("no secret at $fpath");
         }
         return $secret;
     }
@@ -60,15 +60,14 @@ class Util
     // no type for $received because we cannot have nullable yet...
     static function protect_call_using(string $secret_name, $received, callable $execute)
     {
-        Log::trace("access requested for ${_SERVER['REQUEST_URI']}");
         if (Util::is_authorized($secret_name, $received))
         {
-            Log::trace('access granted');
+            Log::etrace("access granted for ${_SERVER['REQUEST_URI']}");
             $execute();
         }
         else
         {
-            Log::trace('access denied');
+            Log::etrace("access denied for ${_SERVER['REQUEST_URI']}");
             die();
         }
     }
@@ -84,12 +83,12 @@ class Util
     
         if (true === $result->ok)
         {
-            Log::trace("webhook enabled: $active");
+            Log::etrace("webhook enabled: $active, url: $url");
             return "webhook enabled: $active";
         }
         else
         {
-            Log::trace($result->description);
+            Log::etrace($result->description);
             return $result->description;
         }
     }
@@ -128,7 +127,7 @@ class Util
             return $config[$key];
         }
     
-        Log::trace("config value $key requested but not found");
+        Log::etrace("config value $key requested but not found");
         return null;
     }
     
@@ -137,13 +136,13 @@ class Util
         $content = @file_get_contents($path);
         if (false === $content)
         {
-            Log::trace("file $path not found");
+            Log::etrace("file $path not found");
             return null;
         }
         $decoded = json_decode($content);
         if (null === $decoded)
         {
-            Log::trace('json error: ' . json_last_error_msg());
+            Log::etrace('json error: ' . json_last_error_msg());
             return null;
         }
         return (array) $decoded;
@@ -153,7 +152,7 @@ class Util
     {
         if (false === file_put_contents($path, json_encode($obj)))
         {
-            Log::trace("error writing file $path");
+            Log::etrace("error writing file $path");
         }
     }
 
@@ -161,7 +160,7 @@ class Util
     {
         $cache = new Cache('Ids');
         $cache->nerds = $id;
-        Log::trace("new nerds group is $id");
+        Log::etrace("new nerds group is $id");
     }
 
     static function get_nerds_id()
@@ -175,7 +174,7 @@ class Util
         $chat_id = Util::get_nerds_id();
         if (null === $chat_id)
         {
-            Log::trace("no group id configured");
+            Log::etrace("no group id configured");
             return;
         }
         $client = Util::get_client();

@@ -13,8 +13,13 @@ class TimetableCheck extends Check
         {
             $remote_hash = hash_file('sha256', $url);
 
-            // TODO: compare hash with cache
-            // TODO: if not equal, notify and replace hash
+            if (null === $this->cache->last_hash
+            || $this->cache->last_hash !== $remote_hash)
+            {
+                // TODO: notify
+                $this->cache->last_hash = $remote_hash;
+                $this->cache->last_update = date();
+            }
         }
         return '';
     }

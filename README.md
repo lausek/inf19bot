@@ -6,6 +6,7 @@ A Telegram bot for inf19.
 
 - [X] Easily extendable
 - [X] Language files
+- [X] Run commands in intervals
 
 ## Installation
 

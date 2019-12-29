@@ -168,6 +168,7 @@ class Util
     {
         $cache = new Cache('Ids');
         $cache->nerds = $id;
+        Log::trace("new nerds group is $id");
     }
 
     static function get_nerds_id()

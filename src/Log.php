@@ -6,9 +6,30 @@ class Log
     public const WARN = 'WARN';
     public const ERROR = 'ERROR';
 
-    static function format($msg, $level)
+    static function format($msg, $level, $display_callstack=false)
     {
         $stamp = date('Y-m-d h:i:s');
+
+        if ($display_callstack)
+        {
+            $stack = "<error>";
+
+            foreach (debug_backtrace() as $frame)
+            {
+                if (__FILE__ !== $frame['file'])
+                {
+                    var_dump($frame);
+                    $stack = "${frame['file']}:${frame['line']}";
+                    $stack .= " ${frame['function']}(";
+                    $stack .= implode(" ", $frame['args']);
+                    $stack .= ")";
+                    break;
+                }
+            }
+            
+            return "[$stamp][$level] $msg called as $stack";
+        }
+
         return "[$stamp][$level] $msg";
     }
 
@@ -37,7 +58,7 @@ class Log
             $ids = isset($cache->forward_err_to) ? $cache->forward_err_to : [];
         }
 
-        $formatted = Log::format($msg, Log::ERROR);
+        $formatted = Log::format($msg, Log::ERROR, true);
 
         if (!empty($ids))
         {

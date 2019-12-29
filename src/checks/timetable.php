@@ -17,7 +17,7 @@ class TimetableCheck extends Check
             || $this->cache->last_hash !== $remote_hash)
             {
                 $msg = Language::get('CHK_TIMETABLE_UPDATED');
-                $msg .= "[";
+                $msg .= " [";
                 $msg .= Language::get('GEN_OPEN_ORIGINAL');
                 $msg .= "]($url)";
 

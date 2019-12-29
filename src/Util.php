@@ -84,7 +84,7 @@ class Util
         if (true === $result->ok)
         {
             Log::etrace("webhook enabled: $active, url: $url");
-            return "webhook enabled: $active";
+            return "webhook enabled: $active, url: $url";
         }
         else
         {

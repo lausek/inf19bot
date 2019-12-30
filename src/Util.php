@@ -58,16 +58,22 @@ class Util
 
     // check if content of secret $secret_name matches the one $received by the script. only process $execute with the request is authorized.
     // no type for $received because we cannot have nullable yet...
-    static function protect_call_using(string $secret_name, $received, callable $execute)
+    static function protect_call_using(string $secret_name, $received, callable $execute, $log=true)
     {
         if (Util::is_authorized($secret_name, $received))
         {
-            Log::etrace("access granted for ${_SERVER['REQUEST_URI']}");
+            if ($log)
+            {
+                Log::etrace("access granted for ${_SERVER['REQUEST_URI']}");
+            }
             $execute();
         }
         else
         {
-            Log::etrace("access denied for ${_SERVER['REQUEST_URI']}");
+            if ($log)
+            {
+                Log::etrace("access denied for ${_SERVER['REQUEST_URI']}");
+            }
             die();
         }
     }

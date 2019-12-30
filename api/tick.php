@@ -9,4 +9,4 @@ Util::protect_call_using('tick', $_GET['key'] ?? null, function ()
         $instance = new $classname;
         $instance->run();
     }
-});
+}, false);

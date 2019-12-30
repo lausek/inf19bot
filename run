@@ -1,4 +1,18 @@
 #!/bin/bash
 
-cd api
-php -S localhost:4000
+case "$1" in
+    "local")
+        cd api
+        php -S localhost:4000
+        ;;
+    "cmd")
+        REQUEST=$(sed "s/<cmd>/$2/g" ./request)
+        curl localhost:4000/hook.php \
+            --data "$REQUEST"
+        ;;
+    *)
+        echo "no command given or not a command. use:"
+        echo "local, cmd"
+        ;;
+esac
+

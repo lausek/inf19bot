@@ -39,6 +39,7 @@ class Log
     {
         if (self::$writing)
         {
+            echo "error while writing trace";
             die();
         }
 

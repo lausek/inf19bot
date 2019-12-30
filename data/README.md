@@ -9,6 +9,7 @@ Create a JSON file `config.json` containing the following keys:
 |webhook_subscribe|Message types to subscribe to ([see Bot API](https://core.telegram.org/bots/api#setwebhook))|[]|
 |webhook_url|URL to which Telegram will push messages|https://inf19bot.../hook.php|
 |tracefile|Location of the trace file. Unset to disable tracing|trace|
+|forward_err_to|Usernames to which the bot should forward critical errors|[notch]
 
 ## Secrets
 

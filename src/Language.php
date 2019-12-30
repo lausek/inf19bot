@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// Wrapper for language files in `data/lang`. Supports lazy-loading.
+
 class Language
 {
     public static $loaded = null;

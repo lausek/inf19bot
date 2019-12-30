@@ -2,6 +2,9 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+// Status check command to test availability of bot. Also used
+// for remembering chat_ids of users configured as `forward_err_to`.
+
 class StartCommand extends Command
 {
     function run($update = null) : string

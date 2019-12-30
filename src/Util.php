@@ -5,6 +5,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Webmozart\PathUtil\Path;
 use TuriBot\Client;
 
+// Collection of homeless functions.
+
 class Util
 {
     static function path($postfix)
@@ -179,22 +181,9 @@ class Util
         Log::etrace("forwarding errors to $id now");
     }
 
-    static function set_nerds_id($id)
-    {
-        $cache = new Cache('Ids');
-        $cache->nerds = $id;
-        Log::etrace("new nerds group chat id is $id");
-    }
-
-    static function get_nerds_id()
-    {
-        $cache = new Cache('Ids');
-        return $cache->nerds;
-    }
-
     static function inform_nerds($msg)
     {
-        $chat_id = Util::get_nerds_id();
+        $chat_id = Cache::get_nerds_id();
         if (null === $chat_id)
         {
             Log::etrace("no group id configured");

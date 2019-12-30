@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+// Display all commands that implement `HasHelp`.
+
 class HelpCommand extends Command implements HasHelp
 {
     function help() : string

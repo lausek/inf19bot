@@ -2,7 +2,8 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-// Check if timetable was updated
+// Check if timetable was updated. Create a notification
+// message if so.
 
 class TimetableCheck extends Check
 {

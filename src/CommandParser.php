@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// Helper utility for determining the `Command` to trigger.
+
 class CommandParser
 {
     static function parse($query)

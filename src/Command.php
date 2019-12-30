@@ -2,12 +2,17 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// Marker interface. Commands will only be displayed in help if
-// this interface was implemented.
+// Marker interface. Commands will only be displayed in `help` if
+// this interface was implemented. Note that all commands **can 
+// be executed** anyway.
+
 interface HasHelp
 {
     function help() : string;
 }
+
+// A `Command` can be performed by all users of a bot. Some commands
+// are not listed inside `help`.
 
 abstract class Command
 {

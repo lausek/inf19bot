@@ -13,9 +13,9 @@ if (isset($update->message))
 
     if ('group' === $update->message->chat->type)
     {
-        if (null === Util::get_nerds_id())
+        if (null === Cache::get_nerds_id())
         {
-            Util::set_nerds_id($chat_id);
+            Cache::set_nerds_id($chat_id);
         }
     }
 

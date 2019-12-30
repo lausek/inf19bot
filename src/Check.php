@@ -2,7 +2,8 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// A check will be run periodically using the `tick` script
+// A `Check` will be run periodically by `api/tick.php`. Use these
+// classes to perform checks for updates inside online services.
 
 abstract class Check extends Command
 {

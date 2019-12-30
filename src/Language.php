@@ -11,7 +11,7 @@ class Language
         self::$loaded = Util::load_json_file($file);
     }
 
-    public static function get(string $key)
+    public static function get(string $key) : string
     {
         if (null === self::$loaded)
         {

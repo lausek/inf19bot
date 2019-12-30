@@ -6,6 +6,9 @@ class Log
     public const WARN = 'WARN';
     public const ERROR = 'ERROR';
 
+    // if an error happens while writing, die()
+    private static $writing = false;
+
     static function format($msg, $level, $display_callstack=false)
     {
         $stamp = date('Y-m-d h:i:s');
@@ -18,7 +21,6 @@ class Log
             {
                 if (__FILE__ !== $frame['file'])
                 {
-                    var_dump($frame);
                     $stack = "${frame['file']}:${frame['line']}";
                     $stack .= " ${frame['function']}(";
                     $stack .= implode(" ", $frame['args']);
@@ -35,12 +37,19 @@ class Log
 
     static function write($msg)
     {
+        if (self::$writing)
+        {
+            die();
+        }
+
+        self::$writing = true;
         $location = Util::get_config('tracefile');
         if (null !== $location)
         {
             $fname = Util::path($location);
             file_put_contents($fname, $msg . "\n", FILE_APPEND);
         }
+        self::$writing = false;
     }
 
     static function trace($msg)

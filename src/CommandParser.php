@@ -33,10 +33,7 @@ class CommandParser
             return false;
         }
     
-        require_once($cmds[$cmd['name']]);
-    
-        $classprefix = ucwords($cmd['name']); 
-        $classname = "${classprefix}Command";
+        $classname = $cmds[$cmd['name']];
         $instance = new $classname;
         $instance->set_args($cmd['args']);
         return $instance;

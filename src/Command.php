@@ -2,6 +2,13 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// Marker interface. Commands will only be displayed in help if
+// this interface was implemented.
+interface HasHelp
+{
+    function help() : string;
+}
+
 abstract class Command
 {
     public $args = [];

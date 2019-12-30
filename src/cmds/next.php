@@ -28,9 +28,14 @@ function parse(string $text) : array
     return $lessons;
 }
 
-class NextCommand extends Command
+class NextCommand extends Command implements HasHelp
 {
-    function run($update = null) : String
+    function help() : string
+    {
+        return Language::get('CMD_NEXT_HELP');
+    }
+
+    function run($update = null) : string
     {
         $timetable_url = Util::get_config('timetable_url');
         $msg = "" . Language::get('CMD_NEXT_GENERAL');

@@ -15,7 +15,7 @@ class Lesson
     public $location;
 }
 
-class NextCommand extends Command implements HasHelp
+class NextCommand extends Command // implements HasHelp
 {
     function help() : string
     {

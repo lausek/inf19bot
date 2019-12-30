@@ -24,21 +24,9 @@ abstract class Check extends Command
                 continue;
             }
             $cmd_name = pathinfo($fname, PATHINFO_FILENAME);
-            $found[$cmd_name] = realpath(__DIR__ . "/checks/$fname");
+            $found[$cmd_name] = Check::get_classname($cmd_name);
         }
     
         return $found;
-    }
-
-    static function load_all() : array
-    {
-        $loaded = [];
-        foreach (self::get_all() as $name => $path)
-        {
-            require_once($path);
-            $classprefix = ucwords($name); 
-            $loaded[$name] = "${classprefix}Check";
-        }
-        return $loaded;
     }
 }

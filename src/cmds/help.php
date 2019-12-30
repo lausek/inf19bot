@@ -12,7 +12,7 @@ class HelpCommand extends Command implements HasHelp
     function run($update = null) : string
     {
         $output = Language::get('CMD_HELP_GREET') . "\n";
-        foreach (self::load_all() as $name => $classname)
+        foreach (self::get_all() as $name => $classname)
         {
             $cmd = new $classname;
             if ($cmd instanceof HasHelp)

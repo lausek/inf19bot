@@ -42,20 +42,9 @@ abstract class Command
                 continue;
             }
             $cmd_name = pathinfo($fname, PATHINFO_FILENAME);
-            $found[$cmd_name] = realpath(__DIR__ . "/cmds/$fname");
+            $found[$cmd_name] = Command::get_classname($cmd_name);
         }
     
         return $found;
-    }
-
-    static function load_all() : array
-    {
-        $loaded = [];
-        foreach (self::get_all() as $name => $path)
-        {
-            require_once($path);
-            $loaded[$name] = self::get_classname($name);
-        }
-        return $loaded;
     }
 }

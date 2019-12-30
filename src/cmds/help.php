@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 class HelpCommand extends Command
 {
-    function run() : String
+    function run($update = null) : String
     {
         $output = Language::get('CMD_HELP_GREET') . "\n";
         foreach (self::get_all() as $name => $location)

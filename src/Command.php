@@ -17,7 +17,7 @@ abstract class Command
         $this->args = $args;
     }
 
-    abstract function run() : string;
+    abstract function run($update = null) : string;
 
     static function get_classname(string $name)
     {

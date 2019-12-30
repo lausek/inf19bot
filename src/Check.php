@@ -6,7 +6,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 abstract class Check extends Command
 {
-    abstract function run() : String;
+    abstract function run($update = null) : String;
 
     static function get_classname(string $name)
     {

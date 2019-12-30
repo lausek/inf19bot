@@ -30,7 +30,7 @@ function parse(string $text) : array
 
 class NextCommand extends Command
 {
-    function run() : String
+    function run($update = null) : String
     {
         $timetable_url = Util::get_config('timetable_url');
         $msg = "" . Language::get('CMD_NEXT_GENERAL');

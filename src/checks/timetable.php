@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 class TimetableCheck extends Check
 {
-    function run() : String
+    function run($update = null) : String
     {
         $url = Util::get_config('timetable_url');
         if (null !== $url)

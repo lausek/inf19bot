@@ -26,7 +26,7 @@ class CommandParser
         $cmd = self::parse($query);
         $cmds = Command::get_all();
 
-        Log::trace("searching for command $cmd");
+        Log::trace("searching for command " . $cmd['name']);
     
         if (!array_key_exists($cmd['name'], $cmds))
         {

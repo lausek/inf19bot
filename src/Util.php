@@ -161,7 +161,10 @@ class Util
         $cache = new Cache('Ids');
         if (isset($cache->forward_err_to))
         {
-            $cache->forward_err_to[] = $id;
+            if (!in_array($id, $cache->forward_err_to))
+            {
+                $cache->forward_err_to = array_merge($cache->forward_err_to, [$id]);
+            }
         }
         else
         {

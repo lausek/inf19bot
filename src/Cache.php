@@ -62,6 +62,18 @@ class Cache
         return $this->inner[$name];
     }
 
+    function __isset($name)
+    {
+        $this->initialize();
+        return isset($this->inner[$name]);
+    }
+
+    function __unset($name)
+    {
+        $this->initialize();
+        unset($this->inner[$name]);
+    }
+
     function __destruct()
     {
         $this->save();

@@ -5,8 +5,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $client = Util::get_client();
 $update = $client->getUpdate();
 
-Log::trace('message received. info: '.var_export($update, true));
-
 if (isset($update->message))
 {
     $chat_id = $client->easy->chat_id;

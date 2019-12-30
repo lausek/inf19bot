@@ -36,7 +36,8 @@ abstract class Command
         return ucwords($name) . "Command";
     }
 
-    static function get_all()
+    // returns a list of all commands
+    static function get_all() : array
     {
         $found = [];
     

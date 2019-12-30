@@ -7,14 +7,15 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 abstract class Check extends Command
 {
-    abstract function run($update = null) : String;
+    abstract function run($update = null) : string;
 
     static function get_classname(string $name)
     {
         return ucwords($name) . "Check";
     }
 
-    static function get_all()
+    // returns a list of all checks
+    static function get_all() : array
     {
         $found = [];
     

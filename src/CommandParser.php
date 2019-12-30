@@ -30,14 +30,14 @@ class CommandParser
 
         Log::trace("searching for command " . $cmd['name']);
     
-        if (!array_key_exists($cmd['name'], $cmds))
+        if (isset($cmds[$cmd['name']]))
         {
-            return false;
+            $classname = $cmds[$cmd['name']];
+            $instance = new $classname;
+            $instance->set_args($cmd['args']);
+            return $instance;
         }
     
-        $classname = $cmds[$cmd['name']];
-        $instance = new $classname;
-        $instance->set_args($cmd['args']);
-        return $instance;
+        return false;
     }
 }

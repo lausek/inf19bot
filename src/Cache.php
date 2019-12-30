@@ -16,6 +16,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 //     $cache->hashval = ...;    // <id>.json is loaded
 //
 // The destructor will persist the changes if the cache was initialized.
+//
+// TODO: This class should rather implement `ArrayAccess` to have a clear separation
+// of object values and cached values.
 
 class Cache
 {

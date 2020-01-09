@@ -37,6 +37,26 @@ class Log
         return "[$stamp][$level] $msg";
     }
 
+    static function forward($msg)
+    {
+        static $ids = null;
+
+        if (null === $ids)
+        {
+            $cache = new Cache('Ids');
+            $ids = isset($cache->forward_err_to) ? $cache->forward_err_to : [];
+        }
+
+        if (!empty($ids))
+        {
+            $client = Util::get_client();
+            foreach ($ids as $forward_to)
+            {
+                $client->sendMessage($forward_to, $msg, 'markdown');
+            }
+        }
+    }
+
     static function write($msg)
     {
         if (self::$writing)
@@ -62,24 +82,10 @@ class Log
 
     static function etrace($msg)
     {
-        static $ids = null;
-
-        if (null === $ids)
-        {
-            $cache = new Cache('Ids');
-            $ids = isset($cache->forward_err_to) ? $cache->forward_err_to : [];
-        }
-
         $formatted = Log::format($msg, Log::ERROR, true);
 
-        if (!empty($ids))
-        {
-            $client = Util::get_client();
-            foreach ($cache->forward_err_to as $forward_to)
-            {
-                $client->sendMessage($forward_to, $formatted, 'markdown');
-            }
-        }
+        // report error to chosen Telegram users
+        Log::forward($formatted);
 
         Log::write($formatted);
     }

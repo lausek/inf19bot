@@ -192,4 +192,16 @@ class Util
         $client = Util::get_client();
         $client->sendMessage($chat_id, $msg, 'markdown');
     }
+
+    // callback if php error happens
+    static function shutdown()
+    {
+        $err = error_get_last();
+        if (E_ERROR === $err['type'])
+        {
+            $msg = var_export($err, true);
+            Log::forward($msg);
+        }
+    }
+
 }

@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+register_shutdown_function('Util::shutdown');
+
 $client = Util::get_client();
 $update = $client->getUpdate();
 

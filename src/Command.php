@@ -51,7 +51,7 @@ abstract class Command
             $found[$cmd_name] = Command::get_classname($cmd_name);
 
             // allows importing classes without `composer update`
-            require_once $found[$cmd_name];
+            require_once __DIR__ . '/cmds/' . $fname;
         }
     
         return $found;

@@ -1,0 +1,13 @@
+{
+    "GEN_OPEN_ORIGINAL": "öffnen",
+    "GEN_PONG": "MEEEOOOWW",
+    "CMD_HELP_HELP": "Zeigt eine Liste aller Befehle an.",
+    "CMD_HELP_GREET": "Hier ist eine Liste der Befehle:",
+    "CMD_HELP_END": "Pls improve meh at [lausek/inf19bot](https://github.com/lausek/inf19bot). KTHXBYE",
+    "CMD_NEXT_HELP": "Wann ist die nächste Stunde?",
+    "CMD_NEXT_GENERAL": "Die nächste Stunde ist...",
+    "CMD_NEXT_DATE": "*Am*",
+    "CMD_NEXT_TIME_FROM": "*Von*",
+    "CMD_NEXT_TIME_TILL": "*Bis*",
+    "CHK_TIMETABLE_UPDATED": "Der Stundenplan wurde geändert."
+}

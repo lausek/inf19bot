@@ -1,6 +1,7 @@
 {
     "GEN_OPEN_ORIGINAL": "open original",
     "GEN_PONG": "MEEEOOOWW",
+    "CMD_BEER_HELP": "Ask your fellows if they want to crack a cool one.",
     "CMD_HELP_HELP": "Displays a list of available commands.",
     "CMD_HELP_GREET": "Here is a list of available commands:",
     "CMD_HELP_END": "Feel free to contribute at [lausek/inf19bot](https://github.com/lausek/inf19bot)",

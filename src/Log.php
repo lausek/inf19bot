@@ -44,7 +44,7 @@ class Log
         if (null === $ids)
         {
             $cache = new Cache('Ids');
-            $ids = isset($cache->forward_err_to) ? $cache->forward_err_to : [];
+            $ids = isset($cache['forward_err_to']) ? $cache['forward_err_to'] : [];
         }
 
         if (!empty($ids))

@@ -167,16 +167,16 @@ class Util
     static function add_forward_id($id)
     {
         $cache = new Cache('Ids');
-        if (isset($cache->forward_err_to))
+        if (isset($cache['forward_err_to']))
         {
-            if (!in_array($id, $cache->forward_err_to))
+            if (!in_array($id, $cache['forward_err_to']))
             {
-                $cache->forward_err_to = array_merge($cache->forward_err_to, [$id]);
+                $cache['forward_err_to'] = array_merge($cache['forward_err_to'], [$id]);
             }
         }
         else
         {
-            $cache->forward_err_to = [$id];
+            $cache['forward_err_to'] = [$id];
         }
         Log::etrace("forwarding errors to $id now");
     }

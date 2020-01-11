@@ -11,7 +11,8 @@ class BeerCommand extends Command implements HasHelp
 
     function add_chat_id($id)
     {
-        Log::trace("beer poll $id created");
+        Log::trace(json_decode(var_export($id, true), true));
+        //Log::trace('beer poll'.var_export($id, true).'created');
     }
 
     function run($update = null)

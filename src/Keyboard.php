@@ -4,7 +4,7 @@ class Keyboard
 {
     public $topic;
     private $buttons = [];
-    private $callback;
+    private $callback = null;
 
     public function __construct(string $topic, callable $callback)
     {
@@ -29,6 +29,13 @@ class Keyboard
 
     public function set_message_id($id)
     {
-        call_user_func($this->callback, $id);
+        $cache = new Cache('Reply');
+
+        // TODO: remember message_id => command_class
+
+        if (null !== $this->callback)
+        {
+            call_user_func($this->callback, $id);
+        }
     }
 }

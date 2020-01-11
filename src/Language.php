@@ -27,4 +27,9 @@ class Language
         }
         return self::$loaded[$key];
     }
+
+    public static function get_array(string $key) : array
+    {
+        return ['yes', 'yeah'];
+    }
 }

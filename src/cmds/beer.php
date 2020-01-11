@@ -9,11 +9,20 @@ class BeerCommand extends Command implements HasHelp
         return Language::get('CMD_BEER_HELP');
     }
 
+    function add_chat_id($id)
+    {
+        Log::trace("beer poll $id created");
+    }
+
     function run($update = null)
     {
-        $keyboard = new Keyboard();
-        $keyboard->add_button('yes', 1);
-        $keyboard->add_button('no', 0);
-        return ['hey', $keyboard];
+        $keyboard = new Keyboard(Language::get('CMD_BEER_QUESTION'), [$this, 'add_chat_id']);
+
+        $yes = array_rand(Language::get_array('CMD_BEER_ANSWER_YES'));
+        $no = array_rand(Language::get_array('CMD_BEER_ANSWER_NO'));
+        $keyboard->add_button($yes, 1);
+        $keyboard->add_button($no, 0);
+
+        return $keyboard;
     }
 }

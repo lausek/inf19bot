@@ -19,7 +19,8 @@ function handle_cmd_output($client, $output)
     if ($output instanceof Keyboard)
     {
         $keyboard = $output->get();
-        $client->sendMessage($chat_id, 'question', 'markdown', null, null, null, $keyboard);
+        $id = $client->sendMessage($chat_id, $output->topic, 'markdown', null, null, null, $keyboard);
+        $output->set_message_id($id);
         return;
     }
     $client->sendMessage($chat_id, $output, 'markdown');
@@ -27,6 +28,8 @@ function handle_cmd_output($client, $output)
 
 $client = Util::get_client();
 $update = $client->getUpdate();
+
+// Log::trace(var_export($update, true));
 
 if (isset($update->message))
 {

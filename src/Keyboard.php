@@ -2,14 +2,14 @@
 
 class Keyboard
 {
-    private $buttons;
+    public $topic;
+    private $buttons = [];
+    private $callback;
 
-    public function __construct(array $buttons = null)
+    public function __construct(string $topic, callable $callback)
     {
-        if (null !== $buttons)
-        {
-            $this->buttons = $buttons;
-        }
+        $this->topic = $topic;
+        $this->callback = $callback;
     }
 
     public function add_button(string $text, $data)
@@ -25,5 +25,10 @@ class Keyboard
         return [
             'inline_keyboard' => [$this->buttons],
         ];
+    }
+
+    public function set_message_id($id)
+    {
+        call_user_func($this->callback, $id);
     }
 }

@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 class StartCommand extends Command
 {
-    function run($update = null) : string
+    function run($update = null)
     {
         if (isset($update->message))
         {

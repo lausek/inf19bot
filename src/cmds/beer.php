@@ -2,8 +2,6 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-// Display all commands that implement `HasHelp`.
-
 class BeerCommand extends Command implements HasHelp
 {
     function help() : string
@@ -11,8 +9,11 @@ class BeerCommand extends Command implements HasHelp
         return Language::get('CMD_BEER_HELP');
     }
 
-    function run($update = null) : string
+    function run($update = null)
     {
-        return 'beer here';
+        $keyboard = new Keyboard();
+        $keyboard->add_button('yes', 1);
+        $keyboard->add_button('no', 0);
+        return ['hey', $keyboard];
     }
 }

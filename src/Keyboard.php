@@ -23,7 +23,7 @@ class Keyboard
     public function get()
     {
         return [
-            'inline_keyboard' => $this->buttons,
+            'inline_keyboard' => [$this->buttons],
         ];
     }
 }

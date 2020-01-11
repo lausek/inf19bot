@@ -11,7 +11,7 @@ class HelpCommand extends Command implements HasHelp
         return Language::get('CMD_HELP_HELP');
     }
 
-    function run($update = null) : string
+    function run($update = null)
     {
         $output = Language::get('CMD_HELP_GREET') . "\n\n";
         foreach (self::get_all() as $name => $classname)

@@ -22,7 +22,9 @@ class BeerCommand extends Command implements HasHelp
             Log::etrace("answer on $message_id for BeerCommand but message is not cached.");
             return;
         }
-        // $this->cache[$message_id][$update->callback_query->from->id] = $update->callback_query->data;
+        $this->cache[$message_id] = array_replace((array) $this->cache[$message_id], [
+            $update->callback_query->from->id => $update->callback_query->data
+        ]);
     }
 
     function run($update = null)

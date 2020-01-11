@@ -3,6 +3,8 @@
     "GEN_PONG": "MEEEOOOWW",
     "CMD_BEER_HELP": "Frag die Runde wer offen für ein Bier ist.",
     "CMD_BEER_QUESTION": "Who's up for a beer?",
+    "CMD_BEER_COUNT_YES": "Yes:",
+    "CMD_BEER_COUNT_NO": "No:",
     "CMD_BEER_ANSWERS_YES": ["Yeah", "Sure"],
     "CMD_BEER_ANSWERS_NO": ["Nah", "Not today"],
     "CMD_HELP_HELP": "Zeigt eine Liste aller Befehle an.",

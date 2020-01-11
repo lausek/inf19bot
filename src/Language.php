@@ -13,7 +13,7 @@ class Language
         self::$loaded = Util::load_json_file($file);
     }
 
-    public static function get(string $key) : string
+    private static function get_untyped(string $key)
     {
         if (null === self::$loaded)
         {
@@ -28,8 +28,13 @@ class Language
         return self::$loaded[$key];
     }
 
+    public static function get(string $key) : string
+    {
+        return (string) Language::get_untyped($key);
+    }
+
     public static function get_array(string $key) : array
     {
-        return ['yes', 'yeah'];
+        return (array) Language::get_untyped($key);
     }
 }

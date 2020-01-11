@@ -33,10 +33,13 @@ class BeerCommand extends Command implements HasHelp
     {
         $keyboard = new Keyboard(Language::get('CMD_BEER_QUESTION'), [$this, 'add_callback_id']);
 
-        $yes = array_rand(Language::get_array('CMD_BEER_ANSWER_YES'));
-        $no = array_rand(Language::get_array('CMD_BEER_ANSWER_NO'));
-        $keyboard->add_button($yes, 1);
-        $keyboard->add_button($no, 0);
+        $positive_answers = Language::get_array('CMD_BEER_ANSWERS_YES');
+        $negative_answers = Language::get_array('CMD_BEER_ANSWERS_NO');
+
+        $yes_idx = array_rand($positive_answers);
+        $no_idx = array_rand($negative_answers);
+        $keyboard->add_button($positive_answers[$yes_idx], 1);
+        $keyboard->add_button($negative_answers[$no_idx], 0);
 
         return $keyboard;
     }

@@ -29,8 +29,9 @@ abstract class Command
         $this->args = $args;
     }
 
-    abstract function run($update = null);
     function callback_on(ChatMessageId $cmid, $update = null) {}
+
+    abstract function run($update = null);
 
     static function get_classname(string $name)
     {

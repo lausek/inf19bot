@@ -32,7 +32,7 @@ class BeerCommand extends Command implements HasHelp
             $update->callback_query->from->id => $update->callback_query->data
         ]);
 
-        $count = BeerCommand::count_yn($cmid);
+        $count = BeerCommand::fetch_yn($cmid);
         Util::get_client()->editMessageText(
             $cmid->chat_id,
             $cmid->message_id,
@@ -66,8 +66,8 @@ class BeerCommand extends Command implements HasHelp
         if (null !== $count)
         {
             $msg .= "\n";
-            $msg .= "\n" . Language::get('CMD_BEER_COUNT_YES') . $count[BeerCommand::ANSWER_YES];
-            $msg .= "\n" . Language::get('CMD_BEER_COUNT_NO') . $count[BeerCommand::ANSWER_NO];
+            $msg .= "\n" . Language::get('CMD_BEER_COUNT_YES') . " " . $count[BeerCommand::ANSWER_YES];
+            $msg .= "\n" . Language::get('CMD_BEER_COUNT_NO') . " " . $count[BeerCommand::ANSWER_NO];
         }
 
         return $msg;
@@ -79,7 +79,7 @@ class BeerCommand extends Command implements HasHelp
         $yes = 0;
         $no = 0;
 
-        foreach ($this->cache[$id] as $answer)
+        foreach ($this->cache[$id] as $user_id => $answer)
         {
             switch ($answer)
             {
@@ -92,5 +92,36 @@ class BeerCommand extends Command implements HasHelp
             }
         }
         return [BeerCommand::ANSWER_YES => $yes, BeerCommand::ANSWER_NO => $no];
+    }
+
+    function fetch_yn(ChatMessageId $cmid)
+    {
+        $client = Util::get_client();
+        $id = (string) $cmid;
+        $yes = [];
+        $no = [];
+
+        foreach ($this->cache[$id] as $user_id => $answer)
+        {
+            $request = $client->getChatMember($cmid->chat_id, $user_id);
+            if (true !== $request->ok)
+            {
+                continue;
+            }
+            $uname = $request->result->user->first_name;
+            switch ($answer)
+            {
+            case BeerCommand::ANSWER_YES:
+                $yes[] = $uname;
+                break;
+            case BeerCommand::ANSWER_NO:
+                $no[] = $uname;
+                break;
+            }
+        }
+        return [
+            BeerCommand::ANSWER_YES => implode(', ', $yes),
+            BeerCommand::ANSWER_NO => implode(', ', $no)
+        ];
     }
 }

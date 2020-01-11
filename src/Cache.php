@@ -13,9 +13,36 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // until a read/write request to `Cache` attributes occurs.
 //     
 //     $cache = new Cache(<id>); // <id>.json was not opened
-//     $cache->hashval = ...;    // <id>.json is loaded
+//     $cache['hashval'] = ...;    // <id>.json is loaded
 //
 // The destructor will persist the changes if the cache was initialized.
+
+class CacheAttribute
+{
+    private $attr;
+
+    function __construct($cache, &$attr)
+    {
+        $cache->initialize();
+        $this->attr = $attr;
+    }
+
+    function __set($name, $value)
+    {
+    }
+
+    function __get($name)
+    {
+    }
+
+    function __isset($name)
+    {
+    }
+
+    function __unset($name)
+    {
+    }
+}
 
 class Cache implements ArrayAccess
 {

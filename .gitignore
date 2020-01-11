@@ -7,3 +7,4 @@ config.json
 **/secret/tick
 trace
 request
+php-errors.log

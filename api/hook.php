@@ -36,8 +36,22 @@ function main()
     
     Log::trace(var_export($update, true));
     
+    // TODO: refactor
     if (isset($update->callback_query))
     {
+        $cache = new Cache('Callback');
+        $message_id = $update->callback_query->message->message_id;
+
+        if (isset($cache[$message_id]))
+        {
+            $cmd = new $cache[$message_id]();
+            $cmd->callback_on($message_id, $update);
+        }
+        else
+        {
+            Log::trace("$message_id is not in `Callback` cache");
+        }
+        
         $client->answerCallbackQuery($update->callback_query->id);
     }
     else if (isset($update->message))

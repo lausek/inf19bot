@@ -11,8 +11,18 @@ class BeerCommand extends Command implements HasHelp
 
     function add_chat_id($id)
     {
-        Log::trace(json_decode(var_export($id, true), true));
-        //Log::trace('beer poll'.var_export($id, true).'created');
+        $this->cache[$id] = [];
+        Log::trace("beer poll $id created");
+    }
+
+    function callback_on($message_id, $update = null)
+    {
+        if (!isset($this->cache[$message_id]))
+        {
+            Log::etrace("answer on $message_id for BeerCommand but message is not cached.");
+            return;
+        }
+        // $this->cache[$message_id][$update->callback_query->from->id] = $update->callback_query->data;
     }
 
     function run($update = null)

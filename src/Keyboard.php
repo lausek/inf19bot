@@ -29,9 +29,9 @@ class Keyboard
 
     public function set_message_id($id)
     {
-        $cache = new Cache('Reply');
+        $cache = new Cache('Callback');
 
-        // TODO: remember message_id => command_class
+        $cache[$id] = get_class($this->callback[0]);
 
         if (null !== $this->callback)
         {

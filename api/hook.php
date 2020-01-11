@@ -22,7 +22,8 @@ function handle_cmd_output($client, $output)
         $request = $client->sendMessage($chat_id, $output->topic, 'markdown', null, null, null, $keyboard);
         if (true === $request->ok)
         {
-            $output->set_message_id($request->result->message_id);
+            $id = ChatMessageId::from($chat_id, $request->result->message_id);
+            $output->set_id($id);
         }
         return;
     }
@@ -40,16 +41,20 @@ function main()
     if (isset($update->callback_query))
     {
         $cache = new Cache('Callback');
-        $message_id = $update->callback_query->message->message_id;
+        $cmid = ChatMessageId::from(
+            $update->callback_query->message->chat->id,
+            $update->callback_query->message->message_id
+        );
+        $id = (string) $cmid;
 
-        if (isset($cache[$message_id]))
+        if (isset($cache[$id]))
         {
-            $cmd = new $cache[$message_id]();
-            $cmd->callback_on($message_id, $update);
+            $cmd = new $cache[$id]();
+            $cmd->callback_on($cmid, $update);
         }
         else
         {
-            Log::trace("$message_id is not in `Callback` cache");
+            Log::trace("$id is not in `Callback` cache");
         }
         
         $client->answerCallbackQuery($update->callback_query->id);

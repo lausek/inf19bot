@@ -30,7 +30,7 @@ abstract class Command
     }
 
     abstract function run($update = null);
-    function callback_on($message_id, $update = null) {}
+    function callback_on(ChatMessageId $cmid, $update = null) {}
 
     static function get_classname(string $name)
     {

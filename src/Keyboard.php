@@ -1,5 +1,32 @@
 <?php
 
+class ChatMessageId
+{
+    public $chat_id, $message_id;
+
+    static function from($chat_id, $message_id)
+    {
+        $that = new ChatMessageId;
+        $that->chat_id = $chat_id;
+        $that->message_id = $message_id;
+        return $that;
+    }
+
+    static function from_raw($raw)
+    {
+        $parts = explode(':', $raw);
+        $that = new ChatMessageId;
+        $that->chat_id = $parts[0];
+        $that->message_id = $parts[1];
+        return $that;
+    }
+
+    function __toString()
+    {
+        return "$this->chat_id:$this->message_id";
+    }
+}
+
 class Keyboard
 {
     public $topic;
@@ -27,11 +54,11 @@ class Keyboard
         ];
     }
 
-    public function set_message_id($id)
+    public function set_id(ChatMessageId $id)
     {
         $cache = new Cache('Callback');
 
-        $cache[$id] = get_class($this->callback[0]);
+        $cache[(string) $id] = get_class($this->callback[0]);
 
         if (null !== $this->callback)
         {

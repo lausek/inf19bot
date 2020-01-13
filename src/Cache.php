@@ -29,14 +29,14 @@ class Cache implements ArrayAccess
     static function set_nerds_id($id)
     {
         $cache = new Cache('Ids');
-        $cache->nerds = $id;
+        $cache['nerds'] = $id;
         Log::etrace("new nerds group chat id is $id");
     }
 
     static function get_nerds_id()
     {
         $cache = new Cache('Ids');
-        return $cache->nerds;
+        return $cache['nerds'];
     }
 
     private function ensure_cache_dir()

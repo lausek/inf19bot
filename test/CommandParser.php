@@ -46,4 +46,12 @@ final class CommandParserTest extends TestCase
             CommandParser::process('/help   ')
         );
     }
+
+    public function testReceiver()
+    {
+        $this->assertInstanceOf(
+            BeerCommand::class,
+            CommandParser::process('/beer@inf19bot')
+        );
+    }
 }

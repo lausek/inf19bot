@@ -6,7 +6,7 @@
         "php": ">=7.3",
         "smalot/pdfparser": "^0.14.0",
         "webmozart/path-util": "^2.3",
-        "lausek/turibot": "dev-master"
+        "davtur19/turibot": "dev-master"
     },
     "authors": [
         {

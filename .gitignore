@@ -1,10 +1,12 @@
 /vendor/
+composer.phar
 composer.lock
 config.json
 **/cache/*
 **/secret/key
 **/secret/tgtoken
 **/secret/tick
+**/secret/asset
 trace
 request
 php-errors.log

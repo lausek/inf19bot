@@ -59,11 +59,18 @@ class Log
 
     static function write($msg)
     {
-        if (self::$writing)
+        if (true === self::$writing)
         {
-            echo "error while writing trace";
+            foreach (debug_backtrace() as $frame)
+            {
+                echo $frame['class'] . "::" . $frame['function'] . " " . $frame['line'] . "\n";
+                //var_dump($frame);
+            }
+            echo "recursive log write detected";
             die();
         }
+
+        // TODO: this must be an atomar operation without any additional log calls
 
         self::$writing = true;
         $location = Util::get_config('tracefile');

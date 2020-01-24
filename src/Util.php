@@ -192,16 +192,17 @@ class Util
         Log::etrace("forwarding errors to $id now");
     }
 
-    static function inform_nerds($msg)
+    static function inform_nerds($msg) : bool
     {
         $chat_id = Cache::get_nerds_id();
         if (null === $chat_id)
         {
             Log::etrace("no group id configured");
-            return;
+            return false;
         }
         $client = Util::get_client();
         $client->sendMessage($chat_id, $msg, 'markdown');
+        return true;
     }
 
     // callback if php error happens

@@ -25,6 +25,8 @@ class BossmailCheck extends Check
 
             if (false !== $mail_ids)
             {
+                Util::inform_nerds(Language::get('CHK_BOSSMAIL_RECEIVED'));
+
                 foreach ($mail_ids as $mail_id)
                 {
                     $mail_text = imap_fetchtext($inbox, $mail_id);

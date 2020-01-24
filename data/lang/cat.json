@@ -15,5 +15,6 @@
     "CMD_NEXT_DATE": "*Am*",
     "CMD_NEXT_TIME_FROM": "*Von*",
     "CMD_NEXT_TIME_TILL": "*Bis*",
-    "CHK_TIMETABLE_UPDATED": "Der Stundenplan wurde geändert."
+    "CHK_TIMETABLE_UPDATED": "Der Stundenplan wurde geändert.",
+    "CHK_BOSSMAIL_RECEIVED": "So höret nun die lieblichen Worte unseres Häuptlings..."
 }

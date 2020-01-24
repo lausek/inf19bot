@@ -39,6 +39,17 @@ class Util
         }
         return $secret;
     }
+
+    static function load_secret_from_json($fpath)
+    {
+        $content = @file_get_contents($fpath);
+        if (false === $content)
+        {
+            Log::etrace("no secret at $fpath");
+            return [];
+        }
+        return (array) json_decode($content);
+    }
     
     // no type for $received because we cannot have nullable yet...
     static function is_authorized(string $secret_name, $received)

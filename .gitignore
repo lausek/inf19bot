@@ -2,11 +2,13 @@
 composer.phar
 composer.lock
 config.json
+data/asset/*
 **/cache/*
 **/secret/key
 **/secret/tgtoken
 **/secret/tick
 **/secret/asset
+**/secret/bossmail.json
 trace
 request
 php-errors.log

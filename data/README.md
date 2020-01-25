@@ -20,7 +20,7 @@ Create a JSON file `config.json` containing the following keys:
     - `mailbox` - server to which the script should connect. requires curly braces around the value like `{imap.<hostname>.com}`
     - `email` - email account of the bot
     - `password` - email password of the bot
-    - `bossmail` - fetch emails coming from this account
+    - `bossmail` - fetch messages with this email as receiver
 
 ### Format
 

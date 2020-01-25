@@ -13,7 +13,7 @@ class BossmailCheck extends Check
         if (isset($creds['mailbox']) && isset($creds['email']) && isset($creds['password']))
         {
             $inbox = imap_open($creds['mailbox'], $creds['email'], $cred['password']);
-            $query = 'FROM "' . $creds['bossmail'] . '"';
+            $query = 'TO "' . $creds['bossmail'] . '"';
             if (false === $inbox)
             {
                 Log::etrace('email login credentials seem to be wrong');

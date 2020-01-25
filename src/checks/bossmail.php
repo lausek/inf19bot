@@ -12,7 +12,7 @@ class BossmailCheck extends Check
 
         if (isset($creds['mailbox']) && isset($creds['email']) && isset($creds['password']))
         {
-            $inbox = imap_open($creds['mailbox'], $creds['email'], $cred['password']);
+            $inbox = imap_open($creds['mailbox'], $creds['email'], $creds['password']);
             $query = 'TO "' . $creds['bossmail'] . '"';
             if (false === $inbox)
             {

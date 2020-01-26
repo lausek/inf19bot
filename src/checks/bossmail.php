@@ -35,8 +35,8 @@ class BossmailCheck extends Check
                     {
                         // fetch email as html
                         $msg = imap_fetchbody($inbox, $mail_id, 2);
-                        $msg = strip_tags($msg);
                     }
+                    $msg = strip_tags($msg);
 
                     if (Util::inform_nerds($msg))
                     {

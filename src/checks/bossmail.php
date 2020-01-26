@@ -29,9 +29,14 @@ class BossmailCheck extends Check
 
                 foreach ($mail_ids as $mail_id)
                 {
-                    $mail_text = imap_fetchtext($inbox, $mail_id);
-                    $mail_unbased = imap_base64($mail_text);
-                    $msg = false !== $mail_unbased ? $mail_unbased : $mail_text;
+                    // fetch email as plain text
+                    $msg = imap_fetchbody($inbox, $mail_id, 1);
+                    if (empty($msg))
+                    {
+                        // fetch email as html
+                        $msg = imap_fetchbody($inbox, $mail_id, 2);
+                    }
+
                     if (Util::inform_nerds($msg))
                     {
                         imap_delete($inbox, $mail_id);

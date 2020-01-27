@@ -12,41 +12,52 @@ class BossmailCheck extends Check
 
         if (isset($creds['mailbox']) && isset($creds['email']) && isset($creds['password']))
         {
-            $inbox = imap_open($creds['mailbox'], $creds['email'], $creds['password']);
             $query = 'TO "' . $creds['bossmail'] . '" UNDELETED';
-            if (false === $inbox)
-            {
-                Log::etrace('email login credentials seem to be wrong');
-                return '';
-            }
 
-            // returns false if query was invalid or nothing was found
-            $mail_ids = imap_search($inbox, $query);
-
-            if (false !== $mail_ids)
+            try
             {
+                $inbox = new PhpImap\Mailbox(
+                    $creds['mailbox'],
+                    $creds['email'],
+                    $creds['password'],
+                    Util::path('/asset')
+                );
+
+                $mail_ids = $inbox->searchMailbox($query);
+                if (empty($mail_ids))
+                {
+                    return '';
+                }
+
                 Util::inform_nerds(Language::get('CHK_BOSSMAIL_RECEIVED'));
 
                 foreach ($mail_ids as $mail_id)
                 {
-                    // fetch email as plain text
-                    $msg = imap_fetchbody($inbox, $mail_id, 1);
-                    if (empty($msg))
+                    $mail = $inbox->getMail($mail_id);
+                    if ($mail->textHtml)
                     {
-                        // fetch email as html
-                        $msg = imap_fetchbody($inbox, $mail_id, 2);
+                        $msg = $mail->textHtml;
+                        $msg = trim(strip_tags($msg));
                     }
-                    $msg = strip_tags($msg);
+                    else
+                    {
+                        $msg = $mail->textPlain;
+                    }
 
                     if (Util::inform_nerds($msg))
                     {
-                        imap_delete($inbox, $mail_id);
+                        if ($mail->hasAttachments())
+                        {
+                            // TODO: send attachments to chat
+                        }
+
+                        $inbox->deleteMail($mail_id);
                     }
                 }
-
-                // delete emails marked for deletion
-                imap_expunge($inbox);
-                imap_close($inbox);
+            }
+            catch (Exception $e)
+            {
+                Log::etrace('email login credentials seem to be wrong');
             }
         }
 

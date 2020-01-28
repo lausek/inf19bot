@@ -53,7 +53,7 @@ class Util
 
     static function get_asset_url(string $filename)
     {
-        $secret = Util::load_secret_from('asset');
+        $secret = Util::load_secret_from(Util::path('secret/asset'));
         $key = hash('sha256', $secret);
         return "{$_SERVER['HTTP_HOST']}/asset.php?key=$key&path=" . urlencode($filename);
     }

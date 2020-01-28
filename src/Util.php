@@ -52,7 +52,7 @@ class Util
     }
     
     // no type for $received because we cannot have nullable yet...
-    static function is_authorized(string $secret_name, $received)
+    static function is_authorized(string $secret_name, $received, $hashbase=null)
     {
         if (!isset($received))
         {
@@ -60,10 +60,16 @@ class Util
         }
         
         $key = Util::load_secret_from(Util::path("/secret/$secret_name"));
-    
+
         if (null === $key)
         {
             return false;
+        }
+
+        // if we expect a hashed value, we need to hash the secret as well
+        if (null !== $hashbase)
+        {
+            $key = hash($hashbase, $key);
         }
         
         return $received === $key;
@@ -71,9 +77,9 @@ class Util
 
     // check if content of secret $secret_name matches the one $received by the script. only process $execute with the request is authorized.
     // no type for $received because we cannot have nullable yet...
-    static function protect_call_using(string $secret_name, $received, callable $execute, $log=true)
+    static function protect_call_using(string $secret_name, $received, callable $execute, $log=true, $hashbase=null)
     {
-        if (Util::is_authorized($secret_name, $received))
+        if (Util::is_authorized($secret_name, $received, $hashbase))
         {
             if ($log)
             {
@@ -215,5 +221,4 @@ class Util
             Log::forward($msg);
         }
     }
-
 }

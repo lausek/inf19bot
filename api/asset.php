@@ -25,4 +25,4 @@ Util::protect_call_using('asset', $_GET['key'] ?? null, function ()
     {
         Util::etrace("asset $abs_path requested but not found");
     }
-}, false);
+}, false, 'sha256');

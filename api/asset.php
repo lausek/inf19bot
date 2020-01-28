@@ -14,15 +14,13 @@ Util::protect_call_using('asset', $_GET['key'] ?? null, function ()
     $path = $_GET['path'] or die('no asset path given');
     $abs_path = Util::path("asset/$path");
 
-    $handle = @fopen($abs_path, 'rb');
-    if (false !== $handle)
+    $handle = fopen($abs_path, 'rb');
+    if (false === $handle)
     {
-        set_header($abs_path);
-        fpassthru($handle);
-        fclose($handle);
+        die();
     }
-    else
-    {
-        Util::etrace("asset $abs_path requested but not found");
-    }
+
+    set_header($abs_path);
+    fpassthru($handle);
+    fclose($handle);
 }, false, 'sha256');

@@ -50,6 +50,13 @@ class Util
         }
         return (array) json_decode($content);
     }
+
+    static function get_asset_url(string $filename)
+    {
+        $secret = Util::load_secret_from('asset');
+        $key = hash('sha256', $secret);
+        return "{$_SERVER['HTTP_HOST']}/asset.php?key=$key&path=" . urlencode($filename);
+    }
     
     // no type for $received because we cannot have nullable yet...
     static function is_authorized(string $secret_name, $received, $hashbase=null)

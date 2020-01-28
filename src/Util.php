@@ -55,7 +55,11 @@ class Util
     {
         $secret = Util::load_secret_from(Util::path('secret/asset'));
         $key = hash('sha256', $secret);
-        return "{$_SERVER['HTTP_HOST']}/asset.php?key=$key&path=" . urlencode($filename);
+        $path = urlencode($filename);
+
+        $prefix = 0 !== strpos($_SERVER['HTTP_HOST'], 'http') ? 'https://' : '';
+
+        return "$prefix{$_SERVER['HTTP_HOST']}/asset.php?key=$key&path=$path";
     }
     
     // no type for $received because we cannot have nullable yet...

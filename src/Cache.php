@@ -36,7 +36,7 @@ class Cache implements ArrayAccess
     static function get_nerds_id()
     {
         $cache = new Cache('Ids');
-        return $cache['nerds'];
+        return $cache['nerds'] ?? null;
     }
 
     private function ensure_cache_dir()

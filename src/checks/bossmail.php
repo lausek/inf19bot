@@ -46,12 +46,20 @@ class BossmailCheck extends Check
 
                     if (Util::inform_nerds($msg))
                     {
+                        $client = Util::get_client();
+                        $nerds_id = Cache::get_nerds_id();
+
                         if ($mail->hasAttachments())
                         {
-                            // TODO: send attachments to chat
+                            foreach ($mail->getAttachments() as $attachment)
+                            {
+                                $asset_path = basename($attachment->filePath);
+                                $asset_url = Util::get_asset_url($asset_path);
+                                $client->sendDocument($nerds_id, $asset_url);
+                            }
                         }
 
-                        $inbox->deleteMail($mail_id);
+                        // $inbox->deleteMail($mail_id);
                     }
                 }
             }

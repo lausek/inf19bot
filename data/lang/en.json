@@ -17,5 +17,5 @@
     "CMD_NEXT_TIME_TILL": "*Till*",
     "CMD_WHATSUP_HELP": "Pull latest changes.",
     "CHK_TIMETABLE_UPDATED": "The timetable was updated.",
-    "CHK_BOSSMAIL_RECEIVED": "The boss has sent an email."
+    "CHK_BOSSMAIL_RECEIVED": "Email forwarded."
 }

@@ -209,7 +209,7 @@ class Util
         Log::etrace("forwarding errors to $id now");
     }
 
-    static function inform_nerds($msg) : bool
+    static function inform_nerds($msg, $markup='markdown') : bool
     {
         $chat_id = Cache::get_nerds_id();
         if (null === $chat_id)
@@ -218,7 +218,7 @@ class Util
             return false;
         }
         $client = Util::get_client();
-        $client->sendMessage($chat_id, $msg, 'markdown');
+        $client->sendMessage($chat_id, $msg, $markup);
         return true;
     }
 

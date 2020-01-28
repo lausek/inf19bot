@@ -37,14 +37,17 @@ class BossmailCheck extends Check
                     if ($mail->textHtml)
                     {
                         $msg = $mail->textHtml;
-                        $msg = trim(strip_tags($msg));
+                        $msg = preg_replace('/<br>/', "\n", $msg);
+                        $msg = trim(strip_tags($msg, '<b><i><u><s><a><pre><code>'));
+                        $markup = 'html';
                     }
                     else
                     {
                         $msg = $mail->textPlain;
+                        $markup = 'markdown';
                     }
 
-                    if (Util::inform_nerds($msg))
+                    if (Util::inform_nerds($msg, $markup))
                     {
                         $client = Util::get_client();
                         $nerds_id = Cache::get_nerds_id();
@@ -59,7 +62,7 @@ class BossmailCheck extends Check
                             }
                         }
 
-                        // $inbox->deleteMail($mail_id);
+                        $inbox->deleteMail($mail_id);
                     }
                 }
             }

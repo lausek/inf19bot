@@ -13,6 +13,12 @@ class BossmailCheck extends Check
         if (isset($creds['mailbox']) && isset($creds['email']) && isset($creds['password']))
         {
             $query = 'TO "' . $creds['bossmail'] . '" UNDELETED';
+            $asset_dir = Util::path('/asset');
+
+            if (!file_exists($asset_dir))
+            {
+                mkdir($asset_dir);
+            }
 
             try
             {
@@ -20,7 +26,7 @@ class BossmailCheck extends Check
                     $creds['mailbox'],
                     $creds['email'],
                     $creds['password'],
-                    Util::path('/asset')
+                    $asset_dir
                 );
 
                 $mail_ids = $inbox->searchMailbox($query);

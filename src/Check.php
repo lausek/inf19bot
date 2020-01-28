@@ -31,4 +31,13 @@ abstract class Check extends Command
     
         return $found;
     }
+    
+    static function tick()
+    {
+        foreach (Check::get_all() as $check => $classname)
+        {
+            $instance = new $classname;
+            $instance->run();
+        }
+    }
 }

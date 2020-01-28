@@ -55,7 +55,7 @@ class BossmailCheck extends Check
                             {
                                 $asset_path = basename($attachment->filePath);
                                 $asset_url = Util::get_asset_url($asset_path);
-                                $client->sendDocument($nerds_id, $asset_url);
+                                $client->sendDocument($nerds_id, $asset_url, null, $attachment->name);
                             }
                         }
 

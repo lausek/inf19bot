@@ -16,7 +16,8 @@ class BossmailCheck extends Check
             $queries = [
                 'TO "' . $creds['bossmail'] . '" UNDELETED',
                 'CC "' . $creds['bossmail'] . '" UNDELETED',
-                'BCC "' . $creds['bossmail'] . '" UNDELETED'
+                'BCC "' . $creds['bossmail'] . '" UNDELETED',
+                'FROM "' . $creds['bossmail'] . '" UNDELETED'
             ];
 
             if (!file_exists($asset_dir))
@@ -72,6 +73,8 @@ class BossmailCheck extends Check
                 $msg = $mail->textPlain;
                 $markup = 'markdown';
             }
+
+            $msg = preg_replace('/\S*google\S*/', '', $msg);
 
             if (Util::inform_nerds($msg, $markup))
             {

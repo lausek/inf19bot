@@ -40,7 +40,6 @@ class BossmailCheck extends Check
                     $mail = $inbox->getMail($unread_id);
                     if (false !== strpos($mail->senderAddress, $creds['bossmail']))
                     {
-                        Util::inform_nerds(Language::get('CHK_BOSSMAIL_RECEIVED'));
                         if ($this->forward($mail))
                         {
                             $inbox->deleteMail($mail_id);
@@ -88,6 +87,8 @@ class BossmailCheck extends Check
                     $client->sendDocument($nerds_id, $asset_url, null, $attachment->name);
                 }
             }
+
+            Util::inform_nerds(Language::get('CHK_BOSSMAIL_RECEIVED'));
 
             return true;
         }

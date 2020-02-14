@@ -218,7 +218,8 @@ class Util
             return false;
         }
         $client = Util::get_client();
-        $client->sendMessage($chat_id, $msg, $markup);
+        $send_response = $client->sendMessage($chat_id, $msg, $markup);
+        Log::trace(var_export($send_response, true));
         return true;
     }
 

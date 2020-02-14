@@ -38,7 +38,7 @@ class BossmailCheck extends Check
                 foreach ($unread_ids as $unread_id)
                 {
                     $mail = $inbox->getMail($unread_id);
-                    if (false === strpos($mail->senderAddress, $creds['bossmail']))
+                    if (false !== strpos($mail->senderAddress, $creds['bossmail']))
                     {
                         Util::inform_nerds(Language::get('CHK_BOSSMAIL_RECEIVED'));
                         if ($this->forward($mail))

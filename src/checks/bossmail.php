@@ -13,12 +13,6 @@ class BossmailCheck extends Check
         if (isset($creds['mailbox']) && isset($creds['email']) && isset($creds['password']))
         {
             $asset_dir = Util::path('/asset');
-            $queries = [
-                'TO "' . $creds['bossmail'] . '" UNDELETED',
-                'CC "' . $creds['bossmail'] . '" UNDELETED',
-                'BCC "' . $creds['bossmail'] . '" UNDELETED',
-                'FROM "' . $creds['bossmail'] . '" UNDELETED'
-            ];
 
             if (!file_exists($asset_dir))
             {
@@ -34,9 +28,24 @@ class BossmailCheck extends Check
                     $asset_dir
                 );
 
-                foreach ($queries as $query)
+                $unread_ids = $inbox->searchMailbox('UNSEEN');
+
+                if (empty($unread_ids))
                 {
-                    $this->find_and_forward($inbox, $query);
+                    return '';
+                }
+
+                foreach ($unread_ids as $unread_id)
+                {
+                    $mail = $inbox->getMail($unread_id);
+                    if (false === strpos($mail->senderAddress, $creds['bossmail']))
+                    {
+                        Util::inform_nerds(Language::get('CHK_BOSSMAIL_RECEIVED'));
+                        if ($this->forward($mail))
+                        {
+                            $inbox->deleteMail($mail_id);
+                        }
+                    }
                 }
             }
             catch (Exception $e)
@@ -48,51 +57,41 @@ class BossmailCheck extends Check
         return '';
     }
 
-    function find_and_forward($inbox, $query)
+    function forward($mail): bool
     {
-        $mail_ids = $inbox->searchMailbox($query);
-        if (empty($mail_ids))
+        if ($mail->textHtml)
         {
-            return '';
+            $msg = $mail->textHtml;
+            $msg = preg_replace('/<br>/', "\n", $msg);
+            $msg = trim(strip_tags($msg, '<b><i><u><s><a><pre><code>'));
+            $markup = 'html';
+        }
+        else
+        {
+            $msg = $mail->textPlain;
+            $markup = 'markdown';
         }
 
-        Util::inform_nerds(Language::get('CHK_BOSSMAIL_RECEIVED'));
+        $msg = preg_replace('/\S*google\S*/', '', $msg);
 
-        foreach ($mail_ids as $mail_id)
+        if (Util::inform_nerds($msg, $markup))
         {
-            $mail = $inbox->getMail($mail_id);
-            if ($mail->textHtml)
-            {
-                $msg = $mail->textHtml;
-                $msg = preg_replace('/<br>/', "\n", $msg);
-                $msg = trim(strip_tags($msg, '<b><i><u><s><a><pre><code>'));
-                $markup = 'html';
-            }
-            else
-            {
-                $msg = $mail->textPlain;
-                $markup = 'markdown';
-            }
+            $client = Util::get_client();
+            $nerds_id = Cache::get_nerds_id();
 
-            $msg = preg_replace('/\S*google\S*/', '', $msg);
-
-            if (Util::inform_nerds($msg, $markup))
+            if ($mail->hasAttachments())
             {
-                $client = Util::get_client();
-                $nerds_id = Cache::get_nerds_id();
-
-                if ($mail->hasAttachments())
+                foreach ($mail->getAttachments() as $attachment)
                 {
-                    foreach ($mail->getAttachments() as $attachment)
-                    {
-                        $asset_path = basename($attachment->filePath);
-                        $asset_url = Util::get_asset_url($asset_path);
-                        $client->sendDocument($nerds_id, $asset_url, null, $attachment->name);
-                    }
+                    $asset_path = basename($attachment->filePath);
+                    $asset_url = Util::get_asset_url($asset_path);
+                    $client->sendDocument($nerds_id, $asset_url, null, $attachment->name);
                 }
-
-                $inbox->deleteMail($mail_id);
             }
+
+            return true;
         }
+
+        return false;
     }
 }

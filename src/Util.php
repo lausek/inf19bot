@@ -217,9 +217,16 @@ class Util
             Log::etrace("no group id configured");
             return false;
         }
+
         $client = Util::get_client();
+
         $send_response = $client->sendMessage($chat_id, $msg, $markup);
-        Log::trace(var_export($send_response, true));
+        if (true !== $send_response['ok'])
+        {
+            Log::trace(var_export($send_response, true));
+            return false;
+        }
+
         return true;
     }
 

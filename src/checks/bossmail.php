@@ -44,6 +44,10 @@ class BossmailCheck extends Check
                         {
                             $inbox->deleteMail($mail_id);
                         }
+                        else
+                        {
+                            imap_clearflag_full($inbox, $unread_id, "//Seen");
+                        }
                     }
                 }
             }

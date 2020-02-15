@@ -42,11 +42,11 @@ class BossmailCheck extends Check
                     {
                         if ($this->forward($mail))
                         {
-                            $inbox->deleteMail($mail_id);
+                            // $inbox->deleteMail($unread_id);
                         }
                         else
                         {
-                            imap_clearflag_full($inbox, $unread_id, "//Seen");
+                            $inbox->markMailAsUnread($unread_id);
                         }
                     }
                 }
@@ -65,7 +65,7 @@ class BossmailCheck extends Check
         if ($mail->textHtml)
         {
             $msg = $mail->textHtml;
-            $msg = preg_replace('/<br>/', "\n", $msg);
+            $msg = preg_replace('/(<br>|<\/p>)/', "\n", $msg);
             $msg = trim(strip_tags($msg, '<b><i><u><s><a><pre><code>'));
             $markup = 'html';
         }
@@ -75,7 +75,7 @@ class BossmailCheck extends Check
             $markup = 'markdown';
         }
 
-        $msg = preg_replace('/\S*google\S*/', '', $msg);
+        $msg = $this->strip_footer($msg);
 
         if (Util::inform_nerds($msg, $markup))
         {
@@ -98,5 +98,13 @@ class BossmailCheck extends Check
         }
 
         return false;
+    }
+
+    // remove google groups email footer
+    function strip_footer(string $msg): string
+    {
+        $parts = explode('--', $msg);
+        array_pop($parts);
+        return implode('--', $parts);
     }
 }

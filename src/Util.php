@@ -221,9 +221,10 @@ class Util
         $client = Util::get_client();
 
         $send_response = $client->sendMessage($chat_id, $msg, $markup);
-        if (true !== $send_response['ok'])
+        if (true !== $send_response->ok)
         {
-            Log::trace(var_export($send_response, true));
+            Log::etrace(var_export($send_response, true));
+            Log::trace($msg);
             return false;
         }
 

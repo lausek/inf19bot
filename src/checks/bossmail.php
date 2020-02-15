@@ -64,9 +64,7 @@ class BossmailCheck extends Check
     {
         if ($mail->textHtml)
         {
-            $msg = $mail->textHtml;
-            $msg = preg_replace('/(<br>|<\/p>)/', "\n", $msg);
-            $msg = trim(strip_tags($msg, '<b><i><u><s><a><pre><code>'));
+            $msg = $this->normalize_html($mail->textHtml);
             $markup = 'html';
         }
         else
@@ -106,5 +104,13 @@ class BossmailCheck extends Check
         $parts = explode('--', $msg);
         array_pop($parts);
         return implode('--', $parts);
+    }
+
+    function normalize_html(string $html): string
+    {
+        $html = preg_replace('/(<br>|<\/p>)/', "\n", $html);
+        $html = trim(strip_tags($html, '<b><i><u><s><a><pre><code>'));
+        $html = html_entity_decode($html);
+        return $html;
     }
 }

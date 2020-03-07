@@ -6,6 +6,8 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 class BossmailCheck extends Check
 {
+    const MAX_MESSAGE_SIZE = 4096;
+
     function run($update = null) : String
     {
         $creds = Util::load_secret_from_json(Util::path('/secret/bossmail.json'));
@@ -74,9 +76,17 @@ class BossmailCheck extends Check
         }
 
         $msg = $this->strip_footer($msg);
+        $len = mb_strlen($msg);
 
-        if (Util::inform_nerds($msg, $markup))
+        for ($i = 0; $i < $len; $i += self::MAX_MESSAGE_SIZE)
         {
+            $chunk = mb_substr($msg, $i, self::MAX_MESSAGE_SIZE);
+
+            if (!Util::inform_nerds($chunk, $markup))
+            {
+                return false;
+            }
+
             $client = Util::get_client();
             $nerds_id = Cache::get_nerds_id();
 
@@ -90,12 +100,11 @@ class BossmailCheck extends Check
                 }
             }
 
-            Util::inform_nerds(Language::get('CHK_BOSSMAIL_RECEIVED'));
-
-            return true;
         }
 
-        return false;
+        Util::inform_nerds(Language::get('CHK_BOSSMAIL_RECEIVED'));
+
+        return true;
     }
 
     // remove google groups email footer
@@ -109,8 +118,17 @@ class BossmailCheck extends Check
     function normalize_html(string $html): string
     {
         $html = preg_replace('/(<br>|<\/p>)/', "\n", $html);
+        $html = preg_replace('/(\n|\r)+/', "\n", $html);
         $html = trim(strip_tags($html, '<b><i><u><s><a><pre><code>'));
         $html = html_entity_decode($html);
+
+        $drops = ['An:', 'Von:', 'Cc:', 'Bcc:', 'Betreff:'];
+
+        foreach ($drops as $drop)
+        {
+            $html = preg_replace("/\s*$drop.*\\n/", '', $html);
+        }
+
         return $html;
     }
 }

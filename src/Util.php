@@ -223,8 +223,17 @@ class Util
         $send_response = $client->sendMessage($chat_id, $msg, $markup);
         if (true !== $send_response->ok)
         {
-            Log::etrace(var_export($send_response, true));
-            Log::trace($msg);
+            // group id was upgraded to supergroup
+            if (400 === $send_response->error_code)
+            {
+                $new_id = $send_response['parameters']['migrate_to_chat_id'];
+                Cache::set_nerds_id($new_id);
+            }
+            else
+            {
+                Log::etrace(var_export($send_response, true));
+                Log::trace($msg);
+            }
             return false;
         }
 

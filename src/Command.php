@@ -24,12 +24,20 @@ abstract class Command
         $this->cache = new Cache(get_class($this));
     }
 
+    function callback_on(ChatMessageId $cmid, $update = null)
+    {}
+
+    function data($fname = null)
+    {
+        $clsname = get_class($this);
+        $path = Util::path("/cmds/$clsname/$fname");
+        return Util::load_json_file($path);
+    }
+
     function set_args($args = [])
     {
         $this->args = $args;
     }
-
-    function callback_on(ChatMessageId $cmid, $update = null) {}
 
     abstract function run($update = null);
 

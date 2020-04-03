@@ -226,7 +226,7 @@ class Util
             // group id was upgraded to supergroup
             if (400 === $send_response->error_code)
             {
-                $new_id = $send_response['parameters']['migrate_to_chat_id'];
+                $new_id = $send_response->parameters->migrate_to_chat_id;
                 Cache::set_nerds_id($new_id);
             }
             else

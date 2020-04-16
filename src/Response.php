@@ -40,9 +40,11 @@ class Response
 
         foreach ($this->entities as $entity)
         {
+            $request = null;
+
             if ($entity instanceof Document)
             {
-                $client->sendDocument($this->chat_id, $entity->url, null, $entity->name);
+                $request = $client->sendDocument($this->chat_id, $entity->url, null, $entity->name);
             }
 
             if ($entity instanceof Keyboard)
@@ -59,6 +61,12 @@ class Response
             if ($entity instanceof Message)
             {
                 $request = $client->sendMessage($this->chat_id, $entity->content, $entity->markup);
+            }
+
+            if ($request !== null && $request->ok !== true)
+            {
+                Log::etrace("sending response failed" . var_export($request, true));
+                return;
             }
         }
     }

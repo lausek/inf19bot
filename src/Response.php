@@ -2,32 +2,6 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-function handle_cmd_output($client, $output)
-{
-    $chat_id = $client->easy->chat_id;
-
-    if (is_array($output))
-    {
-        foreach ($output as $o)
-        {
-            handle_cmd_output($client, $o);
-        }
-        return;
-    }
-    if ($output instanceof Keyboard)
-    {
-        $keyboard = $output->get();
-        $request = $client->sendMessage($chat_id, $output->topic, 'markdown', null, null, null, $keyboard);
-        if (true === $request->ok)
-        {
-            $id = ChatMessageId::from($chat_id, $request->result->message_id);
-            $output->set_id($id);
-        }
-        return;
-    }
-    $client->sendMessage($chat_id, $output, 'markdown');
-}
-
 class Response
 {
     private $chat_id;
@@ -42,14 +16,14 @@ class Response
     {
     }
 
-    function add_message(string $content, string $markup=null)
+    function add_message(string $content, string $markup='markdown')
     {
-        $this->entities[] = new Message();
+        $this->entities[] = new Message($content, $markup);
     }
 
-    function add_keyboard(string $topic) : Keyboard
+    function add_keyboard(string $topic, callable $callback) : Keyboard
     {
-        $keyboard = new Keyboard($topic);
+        $keyboard = new Keyboard($topic, $callback);
         $this->entities[] = $keyboard;
         return $keyboard;
     }
@@ -62,13 +36,13 @@ class Response
         {
             if ($entity instanceof Message)
             {
-                $request = $client->sendMessage($this->chat_id, $entity->content, 'markdown');
+                $request = $client->sendMessage($this->chat_id, $entity->content, $entity->markup);
             }
 
             if ($entity instanceof Keyboard)
             {
                 $keyboard = $entity->get();
-                $request = $client->sendMessage($this->chat_id, $output->topic, 'markdown', null, null, null, $keyboard);
+                $request = $client->sendMessage($this->chat_id, $entity->topic, 'markdown', null, null, null, $keyboard);
                 if (true === $request->ok)
                 {
                     $id = ChatMessageId::from($this->chat_id, $request->result->message_id);

@@ -22,12 +22,11 @@ class TimetableCheck extends Check
                 $msg .= Language::get('GEN_OPEN_ORIGINAL');
                 $msg .= "]($url)";
 
-                Util::inform_nerds($msg);
+                $response->add_message($msg);
 
                 $this->cache['last_hash'] = $remote_hash;
                 $this->cache['last_update'] = date('Y-m-d h:i:s');
             }
         }
-        return '';
     }
 }

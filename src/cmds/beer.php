@@ -46,7 +46,7 @@ class BeerCommand extends Command implements HasHelp
 
     function run(Response $response, $update = null)
     {
-        $keyboard = new Keyboard($this->generate_message(), [$this, 'add_callback_id']);
+        $keyboard = $response->add_keyboard($this->generate_message(), [$this, 'add_callback_id']);
 
         $positive_answers = Language::get_array('CMD_BEER_ANSWERS_YES');
         $negative_answers = Language::get_array('CMD_BEER_ANSWERS_NO');
@@ -55,8 +55,6 @@ class BeerCommand extends Command implements HasHelp
         $no_idx = array_rand($negative_answers);
         $keyboard->add_button($positive_answers[$yes_idx], BeerCommand::ANSWER_YES);
         $keyboard->add_button($negative_answers[$no_idx], BeerCommand::ANSWER_NO);
-
-        return $keyboard;
     }
 
     function generate_message(array $count = null)

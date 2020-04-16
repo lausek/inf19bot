@@ -23,6 +23,7 @@ class HelpCommand extends Command implements HasHelp
             }
         }
         $output .= "\n" . Language::get('CMD_HELP_END');
-        return $output;
+
+        $response->add_message($output);
     }
 }

@@ -23,6 +23,6 @@ class VimfactCommand extends Command implements HasHelp
             $fact = "*Vim Fact #$ridx*\n" . $facts[$idx];
         }
 
-        return $fact;
+        $response->add_message($fact);
     }
 }

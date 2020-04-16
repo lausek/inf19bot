@@ -30,6 +30,7 @@ class NextCommand extends Command // implements HasHelp
         $msg .= "\n" . Language::get('CMD_NEXT_TIME_FROM') . ":";
         $msg .= "\n" . Language::get('CMD_NEXT_TIME_TILL') . ":";
         $msg .= "\n[" . Language::get('GEN_OPEN_ORIGINAL') . "]($timetable_url)";
-        return $msg;
+
+        $response->add_message($msg);
     }
 }

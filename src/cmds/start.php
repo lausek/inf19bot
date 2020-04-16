@@ -21,6 +21,6 @@ class StartCommand extends Command
             }
         }
 
-        return Language::get('GEN_PONG');
+        $response->add_message(Language::get('GEN_PONG'));
     }
 }

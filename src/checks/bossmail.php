@@ -102,8 +102,12 @@ class BossmailCheck extends Check
     // remove google groups email footer
     function strip_footer(string $msg): string
     {
+        // if email has no footer, return original
+        if (false === strpos($msg, '--'))
+        {
+            return $msg;
+        }
         $parts = explode('--', $msg);
-        array_pop($parts);
         return implode('--', $parts);
     }
 

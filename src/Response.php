@@ -14,6 +14,7 @@ class Response
 
     function is_empty() : bool
     {
+        return empty($this->entities);
     }
 
     function add_message(string $content, string $markup='markdown')

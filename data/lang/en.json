@@ -16,6 +16,7 @@
     "CMD_NEXT_TIME_FROM": "*From*",
     "CMD_NEXT_TIME_TILL": "*Till*",
     "CMD_WHATSUP_HELP": "Pull latest changes.",
+    "CMD_WHATSUP_DEFAULT": ["Nothing."],
     "CHK_TIMETABLE_UPDATED": "The timetable was updated.",
     "CHK_BOSSMAIL_RECEIVED": "Forwarded Email.",
     "CMD_VIMFACT_HELP": "Drop a random fact about the Vim editor",

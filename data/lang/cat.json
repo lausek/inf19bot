@@ -16,6 +16,7 @@
     "CMD_NEXT_TIME_FROM": "*Von*",
     "CMD_NEXT_TIME_TILL": "*Bis*",
     "CMD_WHATSUP_HELP": "Lädt die Neuigkeiten des Bots.",
+    "CMD_WHATSUP_DEFAULT": ["Nix", "Nüx", "Nüscht"],
     "CHK_TIMETABLE_UPDATED": "Der Stundenplan wurde geändert.",
     "CHK_BOSSMAIL_RECEIVED": "Weitergeleitete E-Mail.",
     "CMD_VIMFACT_HELP": "Wählt einen zufälligen Fakt über den Vim-Editor",

@@ -11,9 +11,8 @@ class WhatsupCommand extends Command implements HasHelp
         return Language::get('CMD_WHATSUP_HELP');
     }
 
-    function run($update = null)
+    function run(Response $response, $update = null)
     {
-        Check::tick();
-        return '';
+        Check::tick($response);
     }
 }

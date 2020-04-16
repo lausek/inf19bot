@@ -7,7 +7,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 abstract class Check extends Command
 {
-    abstract function run($update = null) : string;
+    abstract function run(Response $response, $update = null);
 
     static function get_classname(string $name)
     {
@@ -32,12 +32,12 @@ abstract class Check extends Command
         return $found;
     }
     
-    static function tick()
+    static function tick(Response $response)
     {
         foreach (Check::get_all() as $check => $classname)
         {
             $instance = new $classname;
-            $instance->run();
+            $instance->run($response);
         }
     }
 }

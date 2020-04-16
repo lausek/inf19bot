@@ -8,7 +8,8 @@ class BossmailCheck extends Check
 {
     const MAX_MESSAGE_SIZE = 4096;
 
-    function run($update = null) : String
+    // function run($update = null) : String
+    function run(Response $response, $update = null)
     {
         $creds = Util::load_secret_from_json(Util::path('/secret/bossmail.json'));
 

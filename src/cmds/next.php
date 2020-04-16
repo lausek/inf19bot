@@ -22,7 +22,7 @@ class NextCommand extends Command // implements HasHelp
         return Language::get('CMD_NEXT_HELP');
     }
 
-    function run($update = null)
+    function run(Response $response, $update = null)
     {
         $timetable_url = Util::get_config('timetable_url');
         $msg = "" . Language::get('CMD_NEXT_GENERAL');

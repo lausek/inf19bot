@@ -4,32 +4,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 register_shutdown_function('Util::shutdown');
 
-function handle_cmd_output($client, $output)
-{
-    $chat_id = $client->easy->chat_id;
-
-    if (is_array($output))
-    {
-        foreach ($output as $o)
-        {
-            handle_cmd_output($client, $o);
-        }
-        return;
-    }
-    if ($output instanceof Keyboard)
-    {
-        $keyboard = $output->get();
-        $request = $client->sendMessage($chat_id, $output->topic, 'markdown', null, null, null, $keyboard);
-        if (true === $request->ok)
-        {
-            $id = ChatMessageId::from($chat_id, $request->result->message_id);
-            $output->set_id($id);
-        }
-        return;
-    }
-    $client->sendMessage($chat_id, $output, 'markdown');
-}
-
 function handle_callback($client, $update)
 {
     $cache = new Cache('Callback');
@@ -65,7 +39,9 @@ function handle_message($client, $update)
     $cmd = CommandParser::process($update->message->text);
     if (false !== $cmd)
     {
-        handle_cmd_output($client, $cmd->run($update));
+        $response = new Response($client->easy->chat_id);
+        $cmd->run($response, $update);
+        $response->send();
     }
 }
 

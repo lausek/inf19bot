@@ -11,7 +11,7 @@ class VimfactCommand extends Command implements HasHelp
         return Language::get('CMD_VIMFACT_HELP');
     }
 
-    function run($update = null)
+    function run(Response $response, $update = null)
     {
         $facts = $this->data('facts.json');
         $fact = Language::get('CMD_VIMFACT_NOTHING');

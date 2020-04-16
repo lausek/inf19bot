@@ -44,7 +44,7 @@ class BeerCommand extends Command implements HasHelp
         );
     }
 
-    function run($update = null)
+    function run(Response $response, $update = null)
     {
         $keyboard = new Keyboard($this->generate_message(), [$this, 'add_callback_id']);
 

@@ -39,7 +39,7 @@ abstract class Command
         $this->args = $args;
     }
 
-    abstract function run($update = null);
+    abstract function run(Response $response, $update = null);
 
     static function get_classname(string $name)
     {

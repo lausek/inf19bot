@@ -17,9 +17,9 @@ class Response
         return empty($this->entities);
     }
 
-    function add_message(string $content, string $markup='markdown')
+    function add_document(string $name, string $url)
     {
-        $this->entities[] = new Message($content, $markup);
+        $this->entities[] = new Document($name, $url);
     }
 
     function add_keyboard(string $topic, callable $callback) : Keyboard
@@ -29,15 +29,20 @@ class Response
         return $keyboard;
     }
 
+    function add_message(string $content, string $markup='markdown')
+    {
+        $this->entities[] = new Message($content, $markup);
+    }
+
     function send()
     {
         $client = Util::get_client();
 
         foreach ($this->entities as $entity)
         {
-            if ($entity instanceof Message)
+            if ($entity instanceof Document)
             {
-                $request = $client->sendMessage($this->chat_id, $entity->content, $entity->markup);
+                $client->sendDocument($this->chat_id, $entity->url, null, $entity->name);
             }
 
             if ($entity instanceof Keyboard)
@@ -49,6 +54,11 @@ class Response
                     $id = ChatMessageId::from($this->chat_id, $request->result->message_id);
                     $entity->set_id($id);
                 }
+            }
+
+            if ($entity instanceof Message)
+            {
+                $request = $client->sendMessage($this->chat_id, $entity->content, $entity->markup);
             }
         }
     }

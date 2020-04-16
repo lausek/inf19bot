@@ -8,7 +8,6 @@ class BossmailCheck extends Check
 {
     const MAX_MESSAGE_SIZE = 4096;
 
-    // function run($update = null) : String
     function run(Response $response, $update = null)
     {
         $creds = Util::load_secret_from_json(Util::path('/secret/bossmail.json'));
@@ -35,7 +34,7 @@ class BossmailCheck extends Check
 
                 if (empty($unread_ids))
                 {
-                    return '';
+                    return;
                 }
 
                 foreach ($unread_ids as $unread_id)
@@ -43,7 +42,7 @@ class BossmailCheck extends Check
                     $mail = $inbox->getMail($unread_id);
                     if (false !== strpos($mail->senderAddress, $creds['bossmail']))
                     {
-                        if ($this->forward($mail))
+                        if ($this->forward($mail, $response))
                         {
                             // $inbox->deleteMail($unread_id);
                         }
@@ -59,11 +58,9 @@ class BossmailCheck extends Check
                 Log::etrace('email login credentials seem to be wrong');
             }
         }
-
-        return '';
     }
 
-    function forward($mail): bool
+    function forward($mail, Response $response): bool
     {
         if ($mail->textHtml)
         {
@@ -83,27 +80,21 @@ class BossmailCheck extends Check
         {
             $chunk = mb_substr($msg, $i, self::MAX_MESSAGE_SIZE);
 
-            if (!Util::inform_nerds($chunk, $markup))
-            {
-                return false;
-            }
+            $response->add_message($chunk, $markup);
 
-            $client = Util::get_client();
-            $nerds_id = Cache::get_nerds_id();
-
+            // FIXME: can this be moved out of loop?
             if ($mail->hasAttachments())
             {
                 foreach ($mail->getAttachments() as $attachment)
                 {
                     $asset_path = basename($attachment->filePath);
                     $asset_url = Util::get_asset_url($asset_path);
-                    $client->sendDocument($nerds_id, $asset_url, null, $attachment->name);
+                    $response->add_document($attachment->name, $asset_url);
                 }
             }
-
         }
 
-        Util::inform_nerds(Language::get('CHK_BOSSMAIL_RECEIVED'));
+        $response->add_message(Language::get('CHK_BOSSMAIL_RECEIVED'));
 
         return true;
     }

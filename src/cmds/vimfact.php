@@ -19,7 +19,8 @@ class VimfactCommand extends Command implements HasHelp
         if (null !== $facts)
         {
             $idx = array_rand($facts);
-            $fact = $facts[$idx];
+            $ridx = $idx + 1;
+            $fact = "*Vim Fact #$ridx*\n" . $facts[$idx];
         }
 
         return $fact;

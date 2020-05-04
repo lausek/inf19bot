@@ -23,5 +23,6 @@
     "Create a line relative to the current one and switch to insert mode. `o` (insert below), `O` (insert above)",
     "`CTRL + C` brings you back to normal mode",
     "Vim has several copy registers. Display them with `:reg`",
-    "The register `\"+` contains the operating systems copy buffer"
+    "The register `\"+` contains the operating systems copy buffer",
+    "`:{range}sort u` sorts the selected lines alphabetically. `range` can be a visual line selection."
 ]

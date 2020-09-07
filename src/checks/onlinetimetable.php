@@ -9,8 +9,8 @@ class OnlinetimetableCheck extends Check
 {
     function run(Response $response, $update = null)
     {
-        $today = date('d.m.y');
-        $dt_today = new DateTime($today);
+        $dt_today = new DateTime();
+        $today = $dt_today->format('d.m.y');
 
         $dt_last_update = null;
         if (isset($this->cache['last_update']))
@@ -18,7 +18,9 @@ class OnlinetimetableCheck extends Check
             $dt_last_update = new DateTime($this->cache['last_update']);
         }
 
-        if ($dt_last_update === null || $dt_last_update < $dt_today)
+        $late_engouh = 18 <= intval($dt_today->format('H'));
+
+        if (($dt_last_update === null || $dt_last_update < new DateTime($today)) && $late_engouh)
         {
             $url = Util::get_config('online_timetable_url');
             if (null !== $url)
@@ -65,6 +67,7 @@ class OnlinetimetableCheck extends Check
                     }
                 }
 
+                // this actuall mutates `today` and invalidates it as such...
                 $tomorrow = $dt_today->add(new DateInterval('P1D'));
                 $tomorrow = $tomorrow->format('d.m.y');
                 if (isset($calendar[$tomorrow]))

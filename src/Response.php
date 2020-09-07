@@ -12,6 +12,11 @@ class Response
         $this->chat_id = $chat_id;
     }
 
+    function is_nerds() : bool
+    {
+        return $this->chat_id == Cache::get_nerds_id();
+    }
+
     function is_empty() : bool
     {
         return empty($this->entities);

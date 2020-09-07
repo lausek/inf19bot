@@ -67,7 +67,7 @@ class OnlinetimetableCheck extends Check
 
                 if (isset($calendar[$today]))
                 {
-                    $msg = Language::get('CHK_ONLINETIMETABLE_TODAY') . ":\n";
+                    $msg = Language::get('CHK_ONLINETIMETABLE_TODAY') . "\n";
                     $msg .= "\n";
                     foreach ($calendar[$today] as $module)
                     {

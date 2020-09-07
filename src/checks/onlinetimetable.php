@@ -9,68 +9,70 @@ class OnlinetimetableCheck extends Check
 {
     function run(Response $response, $update = null)
     {
-        if (!isset($this->cache['last_update']))
+        $today = date('d.m.y');
+        $dt_today = new DateTime($today);
+
+        $dt_last_update = null;
+        if (isset($this->cache['last_update']))
         {
-            $today = date('d.m.y');
-            $dt_today = new DateTime($today);
             $dt_last_update = new DateTime($this->cache['last_update']);
+        }
 
-            if ($dt_last_update < $dt_today)
+        if ($dt_last_update === null || $dt_last_update < $dt_today)
+        {
+            $url = Util::get_config('online_timetable_url');
+            if (null !== $url)
             {
-                $url = Util::get_config('online_timetable_url');
-                if (null !== $url)
+                $content = file_get_contents($url);
+                if ($content === false)
                 {
-                    $content = file_get_contents($url);
-                    if ($content === false)
+                    Log::etrace("error while fetching online timetable $content");
+                    return;
+                }
+
+                $dom = new DOMDocument();
+                @$dom->loadHTMLFile($url);
+                $xpath = new DOMXPath($dom);
+
+                $calendar = [];
+                $nodes = $xpath->query('//*[contains(@class, "week_block")]');
+                foreach ($nodes as $node)
+                {
+                    $tooltip = $node->getElementsByTagName('span')->item(0);
+                    $tooltip->parentNode->removeChild($tooltip);
+                    preg_match_all("/(\d{2}:\d{2}.+\d{2}:\d{2})(.+)(MGH-TINF19)/", $node->textContent, $matches);
+                    $topic = $matches[2][0];
+
+                    if (!$matches)
                     {
-                        Log::etrace("error while fetching online timetable $content");
-                        return;
+                        echo "error\n";
                     }
-
-                    $dom = new DOMDocument();
-                    @$dom->loadHTMLFile($url);
-                    $xpath = new DOMXPath($dom);
-
-                    $calendar = [];
-                    $nodes = $xpath->query('//*[contains(@class, "week_block")]');
-                    foreach ($nodes as $node)
+                    else
                     {
-                        $tooltip = $node->getElementsByTagName('span')->item(0);
-                        $tooltip->parentNode->removeChild($tooltip);
-                        preg_match_all("/(\d{2}:\d{2}.+\d{2}:\d{2})(.+)(MGH-TINF19)/", $node->textContent, $matches);
-                        $topic = $matches[2][0];
+                        $when = $tooltip->getElementsByTagName('div')->item(1)->nodeValue;
+                        preg_match_all("/\w{2}\s(\S+)\s(\S+)-(\S+)/", $when, $matches);
 
-                        if (!$matches)
+                        $date = $matches[1][0];
+                        $start = $matches[2][0];
+                        $end = $matches[3][0];
+
+                        if (!isset($calendar[$date]))
                         {
-                            echo "error\n";
+                            $calendar[$date] = [];
                         }
-                        else
-                        {
-                            $when = $tooltip->getElementsByTagName('div')->item(1)->nodeValue;
-                            preg_match_all("/\w{2}\s(\S+)\s(\S+)-(\S+)/", $when, $matches);
 
-                            $date = $matches[1][0];
-                            $start = $matches[2][0];
-                            $end = $matches[3][0];
-
-                            if (!isset($calendar[$date]))
-                            {
-                                $calendar[$date] = [];
-                            }
-
-                            array_push($calendar[$date], "$date $start-$end Uhr: $topic");
-                        }
+                        array_push($calendar[$date], "$date $start-$end Uhr: $topic");
                     }
+                }
 
-                    if (isset($calendar[$today]))
+                if (isset($calendar[$today]))
+                {
+                    $msg = Language::get('CHK_ONLINETIMETABLE_TODAY') . ":\n";
+                    foreach ($calendar[$today] as $module)
                     {
-                        $msg = Language::get('CHK_ONLINETIMETABLE_TODAY') . ":\n";
-                        foreach ($calendar[$today] as $module)
-                        {
-                            $msg .= $module . "\n";
-                        }
-                        $response->add_message($msg);
+                        $msg .= $module . "\n";
                     }
+                    $response->add_message($msg);
                 }
             }
 

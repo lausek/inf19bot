@@ -5,6 +5,9 @@ case "$1" in
         cd api
         php -S localhost:4000
         ;;
+    "check")
+        php run.php -- $2
+        ;;
     "cmd")
         REQUEST=$(sed "s/<cmd>/$2/g" ./request)
         curl localhost:4000/hook.php \

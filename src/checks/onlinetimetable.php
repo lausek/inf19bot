@@ -78,7 +78,7 @@ class OnlinetimetableCheck extends Check
                     {
                         $msg .= "- $module\n";
                     }
-                    $response->add_message($msg);
+                    //$response->add_message($msg);
                     Util::inform_nerds($msg);
                 }
             }

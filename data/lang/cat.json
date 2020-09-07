@@ -19,6 +19,7 @@
     "CMD_WHATSUP_DEFAULT": ["Nix", "Nüx", "Nüscht"],
     "CHK_TIMETABLE_UPDATED": "Der Stundenplan wurde geändert.",
     "CHK_ONLINETIMETABLE_TODAY": "Stundenplan für heute 📋",
+    "CHK_ONLINETIMETABLE_TOMORROW": "Stundenplan für morgen 📋",
     "CHK_BOSSMAIL_RECEIVED": "Weitergeleitete E-Mail.",
     "CMD_VIMFACT_HELP": "Wählt einen zufälligen Fakt über den Vim-Editor",
     "CMD_VIMFACT_NOTHING": "Sry, ich kann kein vim."

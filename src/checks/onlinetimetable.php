@@ -65,11 +65,13 @@ class OnlinetimetableCheck extends Check
                     }
                 }
 
-                if (isset($calendar[$today]))
+                $tomorrow = $dt_today->add(new DateInterval('P1D'));
+                $tomorrow = $tomorrow->format('d.m.y');
+                if (isset($calendar[$tomorrow]))
                 {
-                    $msg = "$today - " . Language::get('CHK_ONLINETIMETABLE_TODAY') . "\n";
+                    $msg = "$tomorrow - " . Language::get('CHK_ONLINETIMETABLE_TOMORROW') . "\n";
                     $msg .= "\n";
-                    foreach ($calendar[$today] as $module)
+                    foreach ($calendar[$tomorrow] as $module)
                     {
                         $msg .= "- $module\n";
                     }

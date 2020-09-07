@@ -61,13 +61,13 @@ class OnlinetimetableCheck extends Check
                             $calendar[$date] = [];
                         }
 
-                        array_push($calendar[$date], "$date $start-$end Uhr: $topic");
+                        array_push($calendar[$date], "$start-$end Uhr: $topic");
                     }
                 }
 
                 if (isset($calendar[$today]))
                 {
-                    $msg = Language::get('CHK_ONLINETIMETABLE_TODAY') . "\n";
+                    $msg = "$date - " . Language::get('CHK_ONLINETIMETABLE_TODAY') . "\n";
                     $msg .= "\n";
                     foreach ($calendar[$today] as $module)
                     {

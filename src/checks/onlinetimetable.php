@@ -10,38 +10,39 @@ class OnlinetimetableCheck extends Check
     function run(Response $response, $update = null)
     {
         $dt_today = new DateTime();
+        # format date as string; save for later, because adding to
+        # date mutates it...
         $today = $dt_today->format('d.m.y');
 
+        # try to lookup date from cache
         $dt_last_update = null;
         if (isset($this->cache['last_update']))
         {
             $dt_last_update = new DateTime($this->cache['last_update']);
         }
 
+        # is it after 18 o'clock
         $late_engouh = 18 <= intval($dt_today->format('H'));
 
+        # if we do not have an update yet or our current date is later than the previous update
         if (($dt_last_update === null || $dt_last_update < new DateTime($today)) && $late_engouh)
         {
+            $calendar = [];
+
             $url = Util::get_config('online_timetable_url');
             if (null !== $url)
             {
-                $content = file_get_contents($url);
-                if ($content === false)
-                {
-                    Log::etrace("error while fetching online timetable $content");
-                    return;
-                }
-
                 $dom = new DOMDocument();
                 @$dom->loadHTMLFile($url);
                 $xpath = new DOMXPath($dom);
-
-                $calendar = [];
+                # query the source for calendar dates
                 $nodes = $xpath->query('//*[contains(@class, "week_block")]');
                 foreach ($nodes as $node)
                 {
                     $tooltip = $node->getElementsByTagName('span')->item(0);
                     $tooltip->parentNode->removeChild($tooltip);
+
+                    # extract module name from block
                     preg_match_all("/(\d{2}:\d{2}.+\d{2}:\d{2})(.+)(MGH-TINF19)/", $node->textContent, $matches);
                     $topic = $matches[2][0];
 
@@ -51,6 +52,7 @@ class OnlinetimetableCheck extends Check
                     }
                     else
                     {
+                        # tooltip contains the date and other useful information
                         $when = $tooltip->getElementsByTagName('div')->item(1)->nodeValue;
                         preg_match_all("/\w{2}\s(\S+)\s(\S+)-(\S+)/", $when, $matches);
 
@@ -79,6 +81,8 @@ class OnlinetimetableCheck extends Check
                         $msg .= "- $module\n";
                     }
                     $response->add_message($msg);
+
+                    # if this process was requested from the nerds chat, don't emit it twice 
                     if (!$response->is_nerds()) {
                         Util::inform_nerds($msg);
                     }

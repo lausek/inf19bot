@@ -21,11 +21,12 @@ class OnlinetimetableCheck extends Check
             $dt_last_update = new DateTime($this->cache['last_update']);
         }
 
+
         // is it after 18 o'clock
-        $late_engouh = 18 <= intval($dt_today->format('H'));
+        $late_enough = 18 <= intval($dt_today->format('H'));
 
         // if we do not have an update yet or our current date is later than the previous update
-        if (($dt_last_update === null || $dt_last_update < new DateTime($today)) && $late_engouh)
+        if (($dt_last_update === null || $dt_last_update < new DateTime($today)) && $late_enough)
         {
             $calendar = [];
 
@@ -33,7 +34,23 @@ class OnlinetimetableCheck extends Check
             if (null !== $url)
             {
                 $dom = new DOMDocument();
-                @$dom->loadHTMLFile($url);
+
+                libxml_use_internal_errors(true);
+                if (!$dom->loadHTMLFile($url))
+                {
+                    foreach (libxml_get_errors() as $error)
+                    {
+                        switch ($error->level)
+                        {
+                            case LIBXML_ERR_ERROR:
+                            case LIBXML_ERR_FATAL:
+                                throw new Exception($error->message);
+                                break;
+                        }
+                    }
+                    libxml_clear_errors();
+                }
+
                 $xpath = new DOMXPath($dom);
                 // query the source for calendar dates
                 $nodes = $xpath->query('//*[contains(@class, "week_block")]');

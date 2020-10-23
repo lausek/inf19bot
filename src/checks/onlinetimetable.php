@@ -149,7 +149,7 @@ class OnlinetimetableCheck extends Check
         $url = "https://discord.com/api/webhooks/$creds->id/$creds->token";
         $payload = ['content' => $msg];
 
-        $req = \curl_init();
+        $req = curl_init();
         curl_setopt($req, CURLOPT_URL, $url);
         curl_setopt($req, CURLOPT_POST, true);
         curl_setopt($req, CURLOPT_POSTFIELDS, $payload);

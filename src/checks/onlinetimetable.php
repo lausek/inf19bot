@@ -27,75 +27,17 @@ class OnlinetimetableCheck extends Check
         // if we do not have an update yet or our current date is later than the previous update
         if (($dt_last_update === null || $dt_last_update < new DateTime($today)) && $late_enough)
         {
-            $calendar = [];
-
             $url = Util::get_config('online_timetable_url');
             if (null !== $url)
             {
-                $dom = new DOMDocument();
-
-                libxml_use_internal_errors(true);
-                if (!$dom->loadHTMLFile($url))
-                {
-                    foreach (libxml_get_errors() as $error)
-                    {
-                        switch ($error->level)
-                        {
-                            case LIBXML_ERR_ERROR:
-                            case LIBXML_ERR_FATAL:
-                                throw new Exception($error->message);
-                                break;
-                        }
-                    }
-                    libxml_clear_errors();
-                }
-
-                $xpath = new DOMXPath($dom);
-                // query the source for calendar dates
-                $nodes = $xpath->query('//*[contains(@class, "week_block")]');
-                foreach ($nodes as $node)
-                {
-                    $tooltip = $node->getElementsByTagName('span')->item(0);
-                    $tooltip->parentNode->removeChild($tooltip);
-
-                    // extract module name from block
-                    preg_match_all("/(\d{2}:\d{2}.+\d{2}:\d{2})(.+)(MGH-TINF19)/", $node->textContent, $matches);
-                    $topic = $matches[2][0];
-
-                    if (!$matches)
-                    {
-                        echo "error\n";
-                    }
-                    else
-                    {
-                        // tooltip contains the date and other useful information
-                        $when = $tooltip->getElementsByTagName('div')->item(1)->nodeValue;
-                        preg_match_all("/\w{2}\s(\S+)\s(\S+)-(\S+)/", $when, $matches);
-
-                        $date = $matches[1][0];
-                        $start = $matches[2][0];
-                        $end = $matches[3][0];
-
-                        if (!isset($calendar[$date]))
-                        {
-                            $calendar[$date] = [];
-                        }
-
-                        array_push($calendar[$date], "$start-$end Uhr: $topic");
-                    }
-                }
+                $calendar = $this->get_calendar($url);
 
                 // this actuall mutates `today` and invalidates it as such...
                 $tomorrow = $dt_today->add(new DateInterval('P1D'));
                 $tomorrow = $tomorrow->format('d.m.y');
                 if (isset($calendar[$tomorrow]))
                 {
-                    $msg = "$tomorrow - " . Language::get('CHK_ONLINETIMETABLE_TOMORROW') . "\n";
-                    $msg .= "\n";
-                    foreach ($calendar[$tomorrow] as $module)
-                    {
-                        $msg .= "- $module\n";
-                    }
+                    $msg = $this->format_msg($tomorrow, $calendar[$tomorrow]);
 
                     $this->post_calendar($response, $msg);
                 }
@@ -103,6 +45,77 @@ class OnlinetimetableCheck extends Check
 
             $this->cache['last_update'] = $today;
         }
+    }
+
+    public function format_msg($date, $subjects)
+    {
+        $msg = "$date - " . Language::get('CHK_ONLINETIMETABLE_TOMORROW') . "\n";
+        $msg .= "\n";
+        foreach ($subjects as $module)
+        {
+            $msg .= "- $module\n";
+        }
+
+        return $msg;
+    }
+
+    public function get_calendar($url)
+    {
+        $calendar = [];
+        $dom = new DOMDocument();
+
+        libxml_use_internal_errors(true);
+        if (!$dom->loadHTMLFile($url))
+        {
+            foreach (libxml_get_errors() as $error)
+            {
+                switch ($error->level)
+                {
+                    case LIBXML_ERR_ERROR:
+                    case LIBXML_ERR_FATAL:
+                        throw new Exception($error->message);
+                        break;
+                }
+            }
+            libxml_clear_errors();
+        }
+
+        $xpath = new DOMXPath($dom);
+        // query the source for calendar dates
+        $nodes = $xpath->query('//*[contains(@class, "week_block")]');
+        foreach ($nodes as $node)
+        {
+            $tooltip = $node->getElementsByTagName('span')->item(0);
+            $tooltip->parentNode->removeChild($tooltip);
+
+            // extract module name from block
+            preg_match_all("/(\d{2}:\d{2}.+\d{2}:\d{2})(.+)(MGH-TINF19)/", $node->textContent, $matches);
+            $topic = $matches[2][0];
+
+            if (!$matches)
+            {
+                echo "error\n";
+            }
+            else
+            {
+                // tooltip contains the date and other useful information
+                $when = $tooltip->getElementsByTagName('div')->item(1)->nodeValue;
+                preg_match_all("/\w{2}\s(\S+)\s(\S+)-(\S+)/", $when, $matches);
+
+                $date = $matches[1][0];
+                $start = $matches[2][0];
+                $end = $matches[3][0];
+
+                if (!isset($calendar[$date]))
+                {
+                    $calendar[$date] = [];
+                }
+
+                array_push($calendar[$date], "$start-$end Uhr: $topic");
+            }
+        }
+
+        return $calendar;
     }
 
     public function post_calendar($reponse, $msg)

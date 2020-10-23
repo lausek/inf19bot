@@ -127,6 +127,7 @@ class OnlinetimetableCheck extends Check
             if (null === $creds)
             {
                 Log::etrace('couldn\'t retrieve discord webhook credentials');
+                return;
             }
 
             $this->post_discord_webhook_msg($creds, $msg);

@@ -32,7 +32,7 @@ class OnlinetimetableCheck extends Check
             {
                 $calendar = $this->get_calendar($url);
 
-                // this actuall mutates `today` and invalidates it as such...
+                // this actually mutates `today` and invalidates it as such...
                 $tomorrow = $dt_today->add(new DateInterval('P1D'));
                 $tomorrow = $tomorrow->format('d.m.y');
                 if (isset($calendar[$tomorrow]))
@@ -40,6 +40,10 @@ class OnlinetimetableCheck extends Check
                     $msg = $this->format_msg($tomorrow, $calendar[$tomorrow]);
 
                     $this->post_calendar($response, $msg);
+                }
+                else
+                {
+                    Log::etrace("date $tomorrow is not in schedule??");
                 }
             }
 

@@ -122,7 +122,7 @@ class OnlinetimetableCheck extends Check
         return $calendar;
     }
 
-    public function post_calendar($reponse, $msg)
+    public function post_calendar($response, $msg)
     {
         $response->add_message($msg);
 

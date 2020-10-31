@@ -172,12 +172,13 @@ class OnlinetimetableCheck extends Check
         curl_setopt($req, CURLOPT_POSTFIELDS, $payload);
 
         $head = curl_exec($req);
-        $status = curl_getinfo($req, CURLINFO_HTTP_CODE);;
-        curl_close($req);
+        //$status = curl_getinfo($req, CURLINFO_HTTP_CODE);
 
-        if (200 != $status)
+        if (curl_errno($req))
         {
-            Log::etrace('discord webhook post failed');
+            Log::etrace('discord webhook post failed' . curl_strerror(curl_errno($req)));
         }
+
+        curl_close($req);
     }
 }

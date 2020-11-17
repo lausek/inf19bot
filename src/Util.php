@@ -172,7 +172,6 @@ class Util
         $content = @file_get_contents($path);
         if (false === $content)
         {
-            throw new Exception("file $path not found");
             return null;
         }
         $decoded = json_decode($content);

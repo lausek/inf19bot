@@ -43,7 +43,7 @@ class OnlinetimetableCheck extends Check
                 }
                 else
                 {
-                    Log::etrace("date $tomorrow is not in schedule??");
+                    throw new Exception("date $tomorrow is not in schedule??");
                 }
             }
 
@@ -143,7 +143,7 @@ class OnlinetimetableCheck extends Check
             $creds = $this->get_discord_webhook_info($webhook);
             if (null === $creds)
             {
-                Log::etrace('couldn\'t retrieve discord webhook credentials');
+                throw new Exception('couldn\'t retrieve discord webhook credentials');
                 return;
             }
 
@@ -176,7 +176,7 @@ class OnlinetimetableCheck extends Check
 
         if (curl_errno($req))
         {
-            Log::etrace('discord webhook post failed' . curl_strerror(curl_errno($req)));
+            throw new Exception('discord webhook post failed' . curl_strerror(curl_errno($req)));
         }
 
         curl_close($req);

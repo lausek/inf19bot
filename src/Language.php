@@ -22,7 +22,7 @@ class Language
         }
         if (!isset(self::$loaded[$key]))
         {
-            Log::etrace("language key $key requested but not found");
+            throw new Exception("language key $key requested but not found");
             return null;
         }
         return self::$loaded[$key];

@@ -70,7 +70,7 @@ class Response
 
             if ($request !== null && $request->ok !== true)
             {
-                Log::etrace("sending response failed" . var_export($request, true));
+                throw new Exception("sending response failed" . var_export($request, true));
                 return;
             }
         }

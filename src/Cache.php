@@ -30,7 +30,7 @@ class Cache implements ArrayAccess
     {
         $cache = new Cache('Ids');
         $cache['nerds'] = $id;
-        Log::etrace("new nerds group chat id is $id");
+        throw new Exception("new nerds group chat id is $id");
     }
 
     static function get_nerds_id()
@@ -46,7 +46,7 @@ class Cache implements ArrayAccess
         {
             if (!mkdir($cache_dir, 0755))
             {
-                Log::etrace('fs: cache exists but is not dir');
+                throw new Exception('fs: cache exists but is not dir');
                 exit();
             }
         }

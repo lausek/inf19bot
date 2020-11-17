@@ -55,7 +55,7 @@ class BossmailCheck extends Check
             }
             catch (Exception $e)
             {
-                Log::etrace('email login credentials seem to be wrong');
+                throw new Exception('email login credentials seem to be wrong');
             }
         }
     }

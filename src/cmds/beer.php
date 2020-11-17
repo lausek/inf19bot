@@ -24,7 +24,7 @@ class BeerCommand extends Command implements HasHelp
         $id = (string) $cmid;
         if (!isset($this->cache[$id]))
         {
-            Log::etrace("answer on $id for BeerCommand but message is not cached.");
+            throw new Exception("answer on $id for BeerCommand but message is not cached.");
             return;
         }
 

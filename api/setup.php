@@ -52,9 +52,7 @@ Util::protect_call_using('key', $_POST['key'] ?? null, function ()
 {
     if (!function_exists('curl_version'))
     {
-        Log::etrace('curl is not installed');
-        echo 'curl is not installed';
-        die();
+        throw new Exception('curl is not installed');
     }
 
     switch (@$_POST['cmd'])

@@ -35,7 +35,7 @@ class Util
         }
         else
         {
-            Log::etrace("no secret at $fpath");
+            throw new Exception("no secret at $fpath");
         }
         return $secret;
     }
@@ -45,7 +45,7 @@ class Util
         $content = @file_get_contents($fpath);
         if (false === $content)
         {
-            Log::etrace("no secret at $fpath");
+            throw new Exception("no secret at $fpath");
             return [];
         }
         return (array) json_decode($content);
@@ -94,7 +94,7 @@ class Util
         {
             if ($log)
             {
-                Log::etrace("access granted for ${_SERVER['REQUEST_URI']}");
+                throw new Exception("access granted for ${_SERVER['REQUEST_URI']}");
             }
             $execute();
         }
@@ -102,7 +102,7 @@ class Util
         {
             if ($log)
             {
-                Log::etrace("access denied for ${_SERVER['REQUEST_URI']}");
+                throw new Exception("access denied for ${_SERVER['REQUEST_URI']}");
             }
             die();
         }
@@ -119,12 +119,12 @@ class Util
     
         if (true === $result->ok)
         {
-            Log::etrace("webhook enabled: $active, url: $url");
+            throw new Exception("webhook enabled: $active, url: $url");
             return "webhook enabled: $active, url: $url";
         }
         else
         {
-            Log::etrace($result->description);
+            throw new Exception($result->description);
             return $result->description;
         }
     }
@@ -163,7 +163,7 @@ class Util
             return $config[$key];
         }
     
-        Log::etrace("config value $key requested but not found");
+        throw new Exception("config value $key requested but not found");
         return null;
     }
     
@@ -172,13 +172,13 @@ class Util
         $content = @file_get_contents($path);
         if (false === $content)
         {
-            Log::etrace("file $path not found");
+            throw new Exception("file $path not found");
             return null;
         }
         $decoded = json_decode($content);
         if (null === $decoded)
         {
-            Log::etrace('json error: ' . json_last_error_msg());
+            throw new Exception('json error: ' . json_last_error_msg());
             return null;
         }
         return (array) $decoded;
@@ -188,7 +188,7 @@ class Util
     {
         if (false === file_put_contents($path, json_encode($obj)))
         {
-            Log::etrace("error writing file $path");
+            throw new Exception("error writing file $path");
         }
     }
 
@@ -206,7 +206,7 @@ class Util
         {
             $cache['forward_err_to'] = [$id];
         }
-        Log::etrace("forwarding errors to $id now");
+        throw new Exception("forwarding errors to $id now");
     }
 
     static function inform_nerds($msg, $markup='markdown') : bool
@@ -214,7 +214,7 @@ class Util
         $chat_id = Cache::get_nerds_id();
         if (null === $chat_id)
         {
-            Log::etrace("no group id configured");
+            throw new Exception("no group id configured");
             return false;
         }
 
@@ -231,7 +231,7 @@ class Util
             }
             else
             {
-                Log::etrace(var_export($send_response, true));
+                throw new Exception(var_export($send_response, true));
                 Log::trace($msg);
             }
             return false;
@@ -244,7 +244,7 @@ class Util
     static function shutdown()
     {
         $err = error_get_last();
-        if (E_ERROR === $err['type'])
+        if (null !== $err && E_ERROR === $err['type'])
         {
             $msg = var_export($err, true);
             Log::forward($msg);

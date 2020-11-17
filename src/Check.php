@@ -36,8 +36,15 @@ abstract class Check extends Command
     {
         foreach (Check::get_all() as $check => $classname)
         {
-            $instance = new $classname;
-            $instance->run($response);
+            try
+            {
+                $instance = new $classname;
+                $instance->run($response);
+            }
+            catch (Exception $e)
+            {
+                Log::etrace($e);
+            }
         }
     }
 }

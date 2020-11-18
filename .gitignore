@@ -9,6 +9,7 @@ data/asset/*
 **/secret/tick
 **/secret/asset
 **/secret/bossmail.json
+**/secret/mail.json
 trace
 request
 php-errors.log

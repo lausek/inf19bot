@@ -21,6 +21,7 @@
     "CHK_ONLINETIMETABLE_TODAY": "Schedule for today:",
     "CHK_ONLINETIMETABLE_TOMORROW": "Schedule for tomorrow:",
     "CHK_BOSSMAIL_RECEIVED": "Forwarded Email.",
+    "CHK_MAIL_RECEIVED": "Forwarded Email.",
     "CMD_VIMFACT_HELP": "Drop a random fact about the Vim editor",
     "CMD_VIMFACT_NOTHING": "I don't know vim."
 }

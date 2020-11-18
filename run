@@ -2,8 +2,10 @@
 
 case "$1" in
     "local")
-        cd api
-        php -S localhost:4000
+        docker run --rm -it -p 4000:4000 -v $(pwd):/app -w /app --name inf19bot inf19bot
+
+        #cd api
+        #php -S localhost:4000
         ;;
     "check")
         php run.php -- $2
@@ -15,7 +17,7 @@ case "$1" in
         ;;
     *)
         echo "no command given or not a command. use:"
-        echo "local, cmd"
+        echo "local, check, cmd"
         ;;
 esac
 

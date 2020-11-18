@@ -1,6 +1,18 @@
 <?php
 
-if (!isset($argv[2]))
+$check = null;
+
+if (isset($argv[2]))
+{
+    $check = $argv[2];
+}
+
+if (isset($_GET['check']))
+{
+    $check = $_GET['check'];
+}
+
+if (null === $check)
 {
     echo 'no argument given';
     die();
@@ -9,10 +21,8 @@ if (!isset($argv[2]))
 $_SERVER['DOCUMENT_ROOT'] = __DIR__;
 require_once __DIR__ . '/vendor/autoload.php';
 
-$name = $argv[2];
-
-include("src/checks/$name.php");
-$cls = ucwords($name) . 'Check';
+include("src/checks/$check.php");
+$cls = ucwords($check) . 'Check';
 $obj = new $cls();
 
 $response = new Response(0);

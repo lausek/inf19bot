@@ -39,6 +39,12 @@ class Cache implements ArrayAccess
         return $cache['nerds'] ?? null;
     }
 
+    static function get_dev_ids()
+    {
+        $cache = new Cache('Ids');
+        return $cache['forward_err_to'] ?? [];
+    }
+
     private function ensure_cache_dir()
     {
         $cache_dir = Util::path('../cache');

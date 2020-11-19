@@ -1,27 +1,25 @@
-FROM php:7.4-rc
+FROM php:7.4-fpm-alpine
 
 EXPOSE 4000
 
 # idk why this is necessary but it makes the trash software work
-RUN set -eux; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
-		libc-client-dev \
-		libkrb5-dev \
-	; \
-	rm -rf /var/lib/apt/lists/*
-RUN set -eux; \
-	PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap-ssl; \
-	docker-php-ext-install imap
+RUN set -xe && \
+    apk add --update \
+        imap-dev \
+        openssl-dev && \
+    apk add --no-cache --virtual .php-deps \
+        make && \
+    apk add --no-cache --virtual .build-deps \
+        $PHPIZE_DEPS \
+        krb5-dev && \
+    (docker-php-ext-configure imap --with-kerberos --with-imap-ssl) && \
+    (docker-php-ext-install imap > /dev/null) && \
+    apk del .build-deps
 
-#RUN docker-php-ext-configure imap --with-imap-ssl && \
-#    docker-php-ext-enable imap
-
-#RUN docker-php-ext-enable curl
-
-#RUN apt-get update && apt-get install -y \
-#    php7.2-mbstring \
-#    php7.2-curl \
-#    php7.2-imap
+RUN set -xe && \
+    apk add --update && \
+    apk add libzip-dev && \
+    docker-php-ext-configure zip && \
+    docker-php-ext-install zip
 
 CMD ["php", "-S", "0.0.0.0:4000"]

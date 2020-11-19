@@ -7,7 +7,8 @@
         "smalot/pdfparser": "^0.14.0",
         "webmozart/path-util": "^2.3",
         "davtur19/turibot": "dev-master",
-        "php-imap/php-imap": "^3.0"
+        "php-imap/php-imap": "^3.0",
+        "league/html-to-markdown": "^4.10"
     },
     "authors": [
         {

@@ -214,7 +214,7 @@ class Util
         if (null === $chat_id)
         {
             throw new Exception("no group id configured");
-            return false;
+            //return false;
         }
 
         $client = Util::get_client();

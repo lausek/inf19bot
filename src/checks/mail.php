@@ -8,6 +8,13 @@ class MailCheck extends Check
 {
     const MAX_MESSAGE_SIZE = 4096;
 
+    private $filter = null;
+
+    function __construct()
+    {
+        $this->filter = new MoodleFilter;
+    }
+
     function run(Response $response, $update = null)
     {
         $creds = Util::load_secret_from_json(Util::path('/secret/mail.json'));
@@ -40,9 +47,10 @@ class MailCheck extends Check
                 foreach ($unread_ids as $unread_id)
                 {
                     $mail = $inbox->getMail($unread_id);
-                    if ($this->is_forward_allowed($mail))
+                    if ($this->filter->is_forward_allowed($mail))
                     {
-                        if ($this->forward($mail, $response))
+                        $msg = $this->filter->format_msg($mail);
+                        if ($this->forward($mail, $msg, $response))
                         {
                             //$inbox->deleteMail($unread_id);
                         }
@@ -50,8 +58,8 @@ class MailCheck extends Check
                         {
                             //$inbox->markMailAsUnread($unread_id);
                         }
-                        $inbox->markMailAsUnread($unread_id);
                     }
+                    $inbox->markMailAsUnread($unread_id);
                 }
             }
             catch (Exception $e)
@@ -61,80 +69,34 @@ class MailCheck extends Check
         }
     }
 
-    function is_forward_allowed($mail) : bool
+    function forward($mail, $msg, Response $response): bool
     {
-        foreach (get_object_vars($mail) as $var)
-        {
-            echo $var;
-        }
-        return false;
-    }
-
-    function forward($mail, Response $response): bool
-    {
-        if ($mail->textHtml)
-        {
-            $msg = $this->normalize_html($mail->textHtml);
-            $markup = 'html';
-        }
-        else
-        {
-            $msg = $mail->textPlain;
-            $markup = 'markdown';
-        }
-
-        $msg = $this->strip_footer($msg);
         $len = mb_strlen($msg);
 
         for ($i = 0; $i < $len; $i += self::MAX_MESSAGE_SIZE)
         {
             $chunk = mb_substr($msg, $i, self::MAX_MESSAGE_SIZE);
 
-            $response->add_message($chunk, $markup);
+            $response->add_message($chunk /*, $markup */);
+        }
 
-            // FIXME: can this be moved out of loop?
-            if ($mail->hasAttachments())
+        // FIXME: can this be moved out of loop?
+        if ($mail->hasAttachments())
+        {
+            foreach ($mail->getAttachments() as $attachment)
             {
-                foreach ($mail->getAttachments() as $attachment)
-                {
-                    $asset_path = basename($attachment->filePath);
-                    $asset_url = Util::get_asset_url($asset_path);
-                    $response->add_document($attachment->name, $asset_url);
-                }
+                $asset_path = basename($attachment->filePath);
+                $asset_url = Util::get_asset_url($asset_path);
+                $response->add_document($attachment->name, $asset_url);
             }
         }
 
-        $response->add_message(Language::get('CHK_MAIL_RECEIVED'));
+        $static_msg = Language::get('CHK_MAIL_RECEIVED');
+        if (null !== $static_msg)
+        {
+            $response->add_message($static_msg);
+        }
 
         return true;
-    }
-
-    // remove google groups email footer
-    function strip_footer(string $msg): string
-    {
-        // if email has no footer, return original
-        if (false === strpos($msg, '--'))
-        {
-            return $msg;
-        }
-        $parts = explode('--', $msg);
-        return implode('--', $parts);
-    }
-
-    function normalize_html(string $html): string
-    {
-        $html = preg_replace('/(<br>|<\/p>)/', "\n", $html);
-        $html = preg_replace('/(\n|\r)+/', "\n", $html);
-        $html = trim(strip_tags($html, '<b><i><u><s><a><pre><code>'));
-        $html = html_entity_decode($html);
-
-        $drops = ['An:', 'Von:', 'Cc:', 'Bcc:', 'Betreff:'];
-
-        foreach ($drops as $drop)
-        {
-            $html = preg_replace("/\s*$drop.*\\n/", '', $html);
-        }
-
-        return $html;
     }
 }

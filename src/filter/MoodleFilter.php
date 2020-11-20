@@ -9,7 +9,7 @@ class MoodleFilter
     function is_forward_allowed($mail) : bool
     {
         $subject = trim($mail->subject);
-        return strpos($subject, 'INF19') === 0;
+        return strpos($subject, Util::get_config('course')) === 0;
     }
 
     function format_msg($mail)
@@ -17,12 +17,10 @@ class MoodleFilter
         if ($mail->textHtml)
         {
             $msg = $this->normalize_html($mail->textHtml);
-            //$markup = 'html';
         }
         else
         {
             $msg = $mail->textPlain;
-            //$markup = 'markdown';
         }
 
         return $this->strip_footer($msg);
@@ -45,21 +43,6 @@ class MoodleFilter
         $converter = new HtmlConverter();
         $converter->getConfig()->setOption('strip_tags', true);
         $md = $converter->convert($html);
-
-        /*
-        $html = preg_replace('/(<br>|<\/p>)/', "\n", $html);
-        $html = preg_replace('/(\n|\r)+/', "\n", $html);
-        $html = trim(strip_tags($html, '<b><i><u><s><a><pre><code>'));
-        $html = html_entity_decode($html);
-
-        $drops = ['An:', 'Von:', 'Cc:', 'Bcc:', 'Betreff:'];
-
-        foreach ($drops as $drop)
-        {
-            $html = preg_replace("/\s*$drop.*\\n/", '', $html);
-        }
-
-         */
         return $md;
     }
 }

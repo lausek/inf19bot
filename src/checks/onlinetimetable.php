@@ -92,7 +92,7 @@ class OnlinetimetableCheck extends Check
             $tooltip = $node->getElementsByTagName('span')->item(0);
             $tooltip->parentNode->removeChild($tooltip);
 
-            $course = Util::get_config('course')
+            $course = Util::get_config('course');
             // extract module name from block
             preg_match_all("/(\d{2}:\d{2}.+\d{2}:\d{2})(.+)(MGH-T$course)/", $node->textContent, $matches);
             $topic = $matches[2][0];

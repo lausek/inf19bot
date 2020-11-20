@@ -1,6 +1,7 @@
 FROM php:7.4-fpm-alpine
 
 EXPOSE 4000
+WORKDIR /app
 
 # idk why this is necessary but it makes the trash software work
 RUN set -xe && \
@@ -21,5 +22,7 @@ RUN set -xe && \
     apk add libzip-dev && \
     docker-php-ext-configure zip && \
     docker-php-ext-install zip
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 CMD ["php", "-S", "0.0.0.0:4000"]

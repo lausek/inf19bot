@@ -37,3 +37,13 @@ curl <host>/setup.php --data "key=<secret/key>&active=1"
 ## Configuration
 
 Everything is configured inside `data/`. See [Configuration](./data/README.md).
+
+## Development
+
+``` bash
+# build docker image
+sudo docker build -t inf19bot .
+
+# run server
+sudo ./run local
+```

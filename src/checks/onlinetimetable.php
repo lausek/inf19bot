@@ -23,9 +23,10 @@ class OnlinetimetableCheck extends Check
 
         // is it after 18 o'clock
         $late_enough = 18 <= intval($dt_today->format('H'));
+        $update_required = $dt_last_update === null || $dt_last_update->format('Y-m-d') < (new DateTime($today))->format('Y-m-d');
 
         // if we do not have an update yet or our current date is later than the previous update
-        if (($dt_last_update === null || $dt_last_update < new DateTime($today)) && $late_enough)
+        if ($update_required && $late_enough)
         {
             $url = Util::get_config('online_timetable_url');
             if (null !== $url)

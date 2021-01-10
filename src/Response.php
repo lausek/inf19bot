@@ -71,7 +71,6 @@ class Response
             if ($request !== null && $request->ok !== true)
             {
                 throw new Exception("sending response failed" . var_export($request, true));
-                return;
             }
         }
     }

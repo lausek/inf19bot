@@ -12,7 +12,7 @@ class OnlinetimetableCheck extends Check
         $dt_today = new DateTime();
         // format date as string; save for later, because adding to
         // date mutates it...
-        $today = $dt_today->format('d.m.y');
+        $today = $dt_today->format('Y-m-d');
 
         // try to lookup date from cache
         $dt_last_update = null;
